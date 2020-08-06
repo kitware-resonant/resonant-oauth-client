@@ -12,7 +12,7 @@ import {
   LocalStorageBackend,
   BasicQueryStringUtils,
   LocationLike,
-} from "@openid/appauth/built/index";
+} from "@openid/appauth";
 
 class NoHashQueryStringUtils extends BasicQueryStringUtils {
   parse(input: LocationLike, useHash?: boolean) {
@@ -74,7 +74,7 @@ export class IsicLogin {
           code: response.code,
           refresh_token: undefined,
           extras: {
-            code_verifier: request.internal["code_verifier"],
+            code_verifier: request.internal!.code_verifier,
           },
         });
 

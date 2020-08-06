@@ -10,6 +10,7 @@ document.getElementById('sign-in-link').addEventListener('click', (e) => {
 });
 
 isicLogin.onLoginRedirect((apiCredentials) => {
+  debugger;
   document.getElementById('sign-in-link').hidden = true;
   document.getElementById('user-details').innerHTML = JSON.stringify(apiCredentials);
 });

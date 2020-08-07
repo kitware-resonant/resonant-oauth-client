@@ -1,93 +1,111 @@
-import {
-  AuthorizationRequest,
-  AuthorizationServiceConfiguration,
-  BaseTokenRequestHandler,
-  AuthorizationServiceConfigurationJson,
-  FetchRequestor,
-  AuthorizationNotifier,
-  TokenRequest,
-  GRANT_TYPE_AUTHORIZATION_CODE,
-  DefaultCrypto,
-  RedirectRequestHandler,
-  LocalStorageBackend,
-  BasicQueryStringUtils,
-  LocationLike,
-} from "@openid/appauth";
+import {TokenResponse} from '@openid/appauth';
 
-class NoHashQueryStringUtils extends BasicQueryStringUtils {
-  parse(input: LocationLike, useHash?: boolean) {
-    // ignore useHash parameter, always use the query string instead
-    return super.parse(input, false);
-  }
-}
+import IsicLogin from "./isic-login";
 
-export class IsicLogin {
-  protected clientId: string;
-  protected redirectUri: string;
+
+export default class IsicClient {
   protected isicUri: string;
-  protected config: AuthorizationServiceConfiguration;
-  protected authHandler: RedirectRequestHandler;
+  protected token: TokenResponse|null;
+  protected isicLogin: IsicLogin;
+
+  get isLoggedIn() {
+    return this.token !== null;
+  }
+
+  async redirectToLogin() {
+    await this.isicLogin.startLogin();
+  }
+
+  async logout() {
+    await this.storeToken(null);
+  }
 
   constructor(
     clientId: string,
-    redirectUri: string,
-    isicUri = "https://api.isic-archive.com"
+    isicUri = 'https://api.isic-archive.com'
   ) {
-    this.clientId = clientId;
-    this.redirectUri = redirectUri;
-    this.isicUri = isicUri;
-    console.log(this.isicUri);
-    this.config = new AuthorizationServiceConfiguration({
-      authorization_endpoint: `${this.isicUri}/o/authorize/`,
-      token_endpoint: `${this.isicUri}/o/token/`,
-      revocation_endpoint: "",
-    });
-    this.authHandler = new RedirectRequestHandler(
-      new LocalStorageBackend(),
-      new NoHashQueryStringUtils()
-    );
+    this.isicUri = isicUri.replace(/\/$/, '');
+    this.token = null;
+
+    const currentUri = `${window.location.origin}${window.location.pathname}`;
+    this.isicLogin = new IsicLogin(clientId, currentUri, this.isicUri);
   }
 
-  startLogin() {
-    const authRequest = new AuthorizationRequest({
-      client_id: this.clientId,
-      redirect_uri: this.redirectUri,
-      scope: "identity",
-      state: undefined,
-      response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
-    });
-    authRequest.setupCodeVerifier();
-    this.authHandler.performAuthorizationRequest(this.config, authRequest);
+  async maybeRestoreLogin() {
+    // Load from saved state, after a page refresh
+    const token = await this.loadToken();
+    if (token) {
+      this.token = token;
+      return;
+    }
+
+    // Return from login flow
+    try {
+      this.token = await this.isicLogin.finishLogin()
+    } catch (error) {
+      // Anonymous
+      return;
+    }
+    // Finalize return from login flow
+    await this.storeToken(this.token);
+    this.removeQueryString();
   }
 
-  onLogin(callback: (apiCredentials: object) => any) {
-    const notifier = new AuthorizationNotifier();
-    this.authHandler.setAuthorizationNotifier(notifier);
+  protected loadToken(): TokenResponse|null {
+    const serializedToken = window.localStorage.getItem('isic-token');
+    if (serializedToken) {
+      return new TokenResponse(JSON.parse(serializedToken));
+    } else {
+      return null;
+    }
+  }
 
-    notifier.setAuthorizationListener((request, response, error) => {
-      if (response) {
-        const tokenHandler = new BaseTokenRequestHandler(new FetchRequestor());
-        const tokenRequest = new TokenRequest({
-          client_id: this.clientId,
-          redirect_uri: this.redirectUri,
-          grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
-          code: response.code,
-          refresh_token: undefined,
-          extras: {
-            code_verifier: request.internal!.code_verifier,
-          },
-        });
+  protected storeToken(token: TokenResponse|null) {
+    if (!token) {
+      window.localStorage.removeItem('isic-token');
+    } else {
+      const serializedToken = JSON.stringify(token.toJson());
+      window.localStorage.setItem('isic-token', serializedToken);
+    }
+  }
 
-        tokenHandler
-          .performTokenRequest(this.config, tokenRequest)
-          .then(function (r) {
-            callback(r);
-            // debugger;
-            // console.log(r);
-          });
-      }
+  protected removeQueryString() {
+    window.history.replaceState(null, '', window.location.pathname)
+  }
+
+  protected get headers() {
+    const headers = new Headers();
+    if (this.token) {
+      headers.append('Authorization', `${this.token.tokenType} ${this.token.accessToken}`);
+    }
+    return headers;
+  }
+
+  protected get fetchOptions(): RequestInit {
+    return {
+      headers: this.headers,
+      mode: 'cors',
+      credentials: 'omit',
+    }
+  }
+
+  async fetchJson(endpoint: string, method='GET') {
+    const canonicalEndpoint = endpoint
+      .replace(/^\//, '')
+      .replace(/\/$/, '')
+      .concat('/');
+    const resp = await fetch(`${this.isicUri}/${canonicalEndpoint}`, {
+      ...this.fetchOptions,
+      method,
     });
+    if (!resp.ok) {
+      const text = await resp.text();
+      throw new Error(`Request error: ${resp.status}: ${text}`)
+    }
+    return resp.json();
+  }
 
-    this.authHandler.completeAuthorizationRequestIfPossible();
+  async getLegacyToken() {
+    return this.fetchJson(`api/v1/token/legacy`, 'POST');
   }
 }

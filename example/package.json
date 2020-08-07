@@ -1,13 +1,19 @@
 {
-  "name": "example",
-  "version": "1.0.0",
+  "name": "@isic/login-example",
+  "version": "0.0.0",
   "private": true,
-  "license": "MIT",
+  "license": "Apache-2.0",
   "scripts": {
-    "build": "webpack --mode=development"
+    "serve": "parcel index.html"
+  },
+  "dependencies": {
+    "@isic/login": "file:.."
   },
   "devDependencies": {
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
-  }
+    "parcel-bundler": "^1.12.4"
+  },
+  "browserslist": [
+    "last 1 chrome version",
+    "last 1 firefox version"
+  ]
 }

@@ -2,6 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "target": "esnext",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "esnext",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,

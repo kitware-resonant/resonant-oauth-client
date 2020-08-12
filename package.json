@@ -1,6 +1,6 @@
 {
-  "name": "@isic/login",
-  "version": "0.0.1",
+  "name": "@isic/client",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {

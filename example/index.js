@@ -1,4 +1,4 @@
-import IsicClient from '@isic/login';
+import IsicClient from '@isic/client';
 
 const client = new IsicClient(
   'v1odYySCetBht6DT9svQdAkvmVXrRHOwIIGNk6JG',

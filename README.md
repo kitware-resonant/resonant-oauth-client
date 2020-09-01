@@ -1,3 +1,5 @@
+# ISIC Client
+
 A client library for authenticating with the ISIC Archive from a SPA (single page application).
 
 ![npm](https://img.shields.io/npm/v/@isic/client)

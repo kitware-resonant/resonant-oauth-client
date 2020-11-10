@@ -25,6 +25,9 @@ $ yarn add @isic/client
 // create an isic client
 // when running the app pass the CLIENT_ID as an environment var
 const client = new IsicClient(process.env.CLIENT_ID);
+
+// or, if connecting to the sandbox:
+// const client = new IsicClient(process.env.CLIENT_ID, 'https://api-sandbox.isic-archive.com');
 ```
 
 ```js

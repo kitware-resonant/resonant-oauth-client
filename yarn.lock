@@ -2,27 +2,27 @@
 # yarn lockfile v1
 
 
-"@openid/appauth@^1.2.8":
-  version "1.2.8"
-  resolved "https://registry.yarnpkg.com/@openid/appauth/-/appauth-1.2.8.tgz#d67bdf83101181216f9b10d7361fef0c881c694e"
-  integrity sha512-dZYOkKLTwCuyV1pInlKiG4Mu2cVHyCBgBypyZRadrpwRm8xyBEvGF9ruPRgr3x9l2CFvOY1JoNif7pRpVqy8Qw==
+"@openid/appauth@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@openid/appauth/-/appauth-1.3.0.tgz#3fe5b2621b627f048b348cc6942b84db3891be95"
+  integrity sha512-dMjH3xsET1mSYJ1jN4scsIRxNeGnMeQ+djbS+aiNFxj1JSNxrScR3Lvx161YCVwD2Yu9a5D/qpVGqWGZ2YBq7Q==
   dependencies:
     "@types/base64-js" "^1.3.0"
-    "@types/jquery" "^3.5.0"
+    "@types/jquery" "^3.5.1"
     base64-js "^1.3.1"
-    follow-redirects "^1.12.1"
+    follow-redirects "^1.13.0"
     form-data "^3.0.0"
-    opener "^1.5.1"
+    opener "^1.5.2"
 
 "@types/base64-js@^1.3.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@types/base64-js/-/base64-js-1.3.0.tgz#c939fdba49846861caf5a246b165dbf5698a317c"
   integrity sha512-ZmI0sZGAUNXUfMWboWwi4LcfpoVUYldyN6Oe0oJ5cCsHDU/LlRq8nQKPXhYLOx36QYSW9bNIb1vvRrD6K7Llgw==
 
-"@types/jquery@^3.5.0":
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.1.tgz#cebb057acf5071c40e439f30e840c57a30d406c3"
-  integrity sha512-Tyctjh56U7eX2b9udu3wG853ASYP0uagChJcQJXLUXEU6C/JiW5qt5dl8ao01VRj1i5pgXPAf8f1mq4+FDLRQg==
+"@types/jquery@^3.5.1":
+  version "3.5.4"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.4.tgz#e923f7d05ca790530f17f80a3b89bc28853fa17f"
+  integrity sha512-//9CHhaUt/rurMJTxGI+I6DmsNHgYU6d8aSLFfO5dB7+10lwLnaWT0z5GY/yY82Q/M+B+0Qh3TixlJ8vmBeqIw==
   dependencies:
     "@types/sizzle" "*"
 
@@ -53,10 +53,10 @@ delayed-stream@~1.0.0:
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
   integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
 
-follow-redirects@^1.12.1:
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.12.1.tgz#de54a6205311b93d60398ebc01cf7015682312b6"
-  integrity sha512-tmRv0AVuR7ZyouUHLeNSiO6pqulF7dYa3s19c6t+wz9LD69/uSzdMxJ2S91nTI9U3rt/IldxpzMOFejp6f0hjg==
+follow-redirects@^1.13.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.0.tgz#b42e8d93a2a7eea5ed88633676d6597bc8e384db"
+  integrity sha512-aq6gF1BEKje4a9i9+5jimNFIpq4Q1WiwBToeRK5NvZBd/TRsmW8BsJfOEGkr76TbOyPVD3OVDN910EcUNtRYEA==
 
 form-data@^3.0.0:
   version "3.0.0"
@@ -79,12 +79,12 @@ mime-types@^2.1.12:
   dependencies:
     mime-db "1.44.0"
 
-opener@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/opener/-/opener-1.5.1.tgz#6d2f0e77f1a0af0032aca716c2c1fbb8e7e8abed"
-  integrity sha512-goYSy5c2UXE4Ra1xixabeVh1guIX/ZV/YokJksb6q2lubWu6UbvPQ20p542/sFIll1nl8JnCyK9oBaOcCWXwvA==
+opener@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/opener/-/opener-1.5.2.tgz#5d37e1f35077b9dcac4301372271afdeb2a13598"
+  integrity sha512-ur5UIdyw5Y7yEj9wLzhqXiy6GZ3Mwx0yGI+5sMn2r0N0v3cKJvUmFH5yPP+WXh9e0xfyzyJX95D8l088DNFj7A==
 
-typescript@^3.9.7:
-  version "3.9.7"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.7.tgz#98d600a5ebdc38f40cb277522f12dc800e9e25fa"
-  integrity sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==
+typescript@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.0.5.tgz#ae9dddfd1069f1cb5beb3ef3b2170dd7c1332389"
+  integrity sha512-ywmr/VrTVCmNTJ6iV2LwIrfG1P+lv6luD8sUJs+2eI9NLGigaN+nUQc13iHqisq7bra9lnmUSYqbJvegraBOPQ==

@@ -24,6 +24,10 @@ export default class IsicClient {
     clientId: string,
     isicUri = 'https://api.isic-archive.com'
   ) {
+    if (!window.isSecureContext) {
+      throw Error('ISIC Client cannot operate within insecure contexts.')
+    }
+
     this.isicUri = isicUri.replace(/\/$/, '');
     this.token = null;
 

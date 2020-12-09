@@ -17,7 +17,7 @@ export default class IsicClient {
   }
 
   async logout() {
-    await this.storeToken(null);
+    this.storeToken(null);
   }
 
   constructor(
@@ -37,7 +37,7 @@ export default class IsicClient {
 
   async maybeRestoreLogin() {
     // Load from saved state, after a page refresh
-    const token = await this.loadToken();
+    const token = this.loadToken();
     if (token) {
       this.token = token;
       return;
@@ -51,7 +51,7 @@ export default class IsicClient {
       return;
     }
     // Finalize return from login flow
-    await this.storeToken(this.token);
+    this.storeToken(this.token);
     this.removeQueryString();
   }
 

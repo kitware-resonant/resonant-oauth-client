@@ -26,8 +26,13 @@ export default class ResolvingRedirectRequestHandler extends RedirectRequestHand
     if (!response) {
       // Based on the implementation of completeAuthorizationRequest, the error is
       // typically available at this point, but it cannot be structurally guaranteed
-      const errorDescription = authorizationRequestResponse.error?.errorDescription ?? 'unknown';
-      throw new Error(`Authorization error: ${errorDescription}.`);
+      const errorCode = authorizationRequestResponse.error?.error;
+      const errorDescription = authorizationRequestResponse.error?.errorDescription;
+
+      // This is an explicit server-provided error, so log it
+      const error = new Error(`Authorization error: ${errorCode}${errorDescription ? `: ${errorDescription}` : ''}.`);
+      console.error(error);
+      throw error;
     }
 
     const { request } = authorizationRequestResponse;

@@ -73,6 +73,8 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
 This repository comes bundled with an [example application](example/index.html). Run it with:
 ```bash
 git clone https://github.com/girder/girder-oauth-client.git
+yarn install
+yarn build
 cd example
 yarn install
 yarn serve

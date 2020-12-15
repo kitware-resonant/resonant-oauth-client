@@ -1,7 +1,9 @@
-import IsicClient from '@isic/client';
+import OauthClient from '@girder/oauth-client';
 
-const client = new IsicClient(
-  'v1odYySCetBht6DT9svQdAkvmVXrRHOwIIGNk6JG',
+const client = new OauthClient(
+  'http://localhost:8000/oauth/',
+  'Qir0Aq7AKIsAkMDLQe9MEfORbHEBKsViNhAKJf1A',
+  [],
 );
 
 document.querySelector('#sign-in-link')
@@ -16,18 +18,8 @@ document.querySelector('#sign-out-link')
     window.location.reload();
   });
 
-let legacyToken;
 client.maybeRestoreLogin()
   .then(() => {
-    if (client.isLoggedIn) {
-      return client.getLegacyToken();
-    } else {
-      return null;
-    }
-  })
-  .then((_legacyToken) => {
-    legacyToken = _legacyToken;
-  })
-  .then(() => {
-    document.querySelector('#legacy-token').innerHTML = JSON.stringify(legacyToken);
+    document.querySelector('#logged-in').innerHTML = JSON.stringify(client.isLoggedIn);
+    document.querySelector('#auth-headers').innerHTML = JSON.stringify(client.authHeaders);
   });

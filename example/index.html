@@ -2,13 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>ISIC Login</title>
+    <title>OAuth Login</title>
   </head>
   <body>
     <a id="sign-in-link" href="#">Sign in</a>
     <a id="sign-out-link" href="#">Sign out</a>
-    <p id="user-details"></p>
-    <p id="legacy-token"></p>
+    <p>
+      Logged In:
+      <span id="logged-in"></span>
+    </p>
+    <p>
+      Auth Headers:
+      <span id="auth-headers"></span>
+    </p>
     <script src="./index.js"></script>
   </body>
 </html>

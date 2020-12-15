@@ -1,2 +1,1 @@
-export { default } from './isic-client';
-export * from './isic-login';
+export { default } from './oauth-client';

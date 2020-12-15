@@ -1,78 +1,98 @@
-# ISIC Client
+# girder-oauth-client
+[![npm (scoped)](https://img.shields.io/npm/v/@girder/oauth-client)](https://www.npmjs.com/package/@girder/oauth-client)
 
-A client library for authenticating with the ISIC Archive from a SPA (single page application).
-
-[![npm (scoped)](https://img.shields.io/npm/v/@isic/client)](https://www.npmjs.com/package/@isic/client)
-
+A TypeScript library for performing OAuth login to a Girder 4 (Django) server.
 
 ## Description
-
-The ISIC client provides support for authenticating with the ISIC Archive using the Auth Code with PKCE flow of OAuth2.0.
+This provides support for authenticating with Girder 4 servers,
+using the OAuth2.0 Authorization Code Grant with PKCE flow.
 
 ## Usage
+* Install the library:
+  ```bash
+  yarn add @girder/oauth-client
+  ```
 
-```bash
-$ npm install @isic/client
+  or if you're using npm:
+  ```bash
+  npm install @girder/oauth-client
+  ```
 
-```
+* Instantiate an `OauthClient` with your application-specific configuration:
+  ```js
+  const oauthClient = new OauthClient(
+    process.env.OAUTH_API_ROOT, // e.g. 'http://localhost:8000/oauth/'
+    process.env.OAUTH_CLIENT_ID, // e.g. 'Qir0Aq7AKIsAkMDLQe9MEfORbHEBKsViNhAKJf1A'
+    ['identity'], // Token scopes, as defined by the server
+  );
+  ```
 
-or if you're using yarn:
-```bash
-$ yarn add @isic/client
-```
-
-```js
-// create an isic client
-// when running the app pass the CLIENT_ID as an environment var
-const client = new IsicClient(process.env.CLIENT_ID);
-
-// or, if connecting to the sandbox:
-// const client = new IsicClient(process.env.CLIENT_ID, 'https://api-sandbox.isic-archive.com');
-```
-
-```js
-// handle the client signing in
-document.querySelector('#sign-in-link').addEventListener('click', (event) => {
+* Call `redirectToLogin` when it's time to start a login flow:
+  ```js
+  document.querySelector('#sign-in-link').addEventListener('click', (event) => {
     event.preventDefault();
     client.redirectToLogin();
-});
-```
+    // This will redirect away from the current page
+  });
+  ```
 
-```js
-// load the proper token on each page load
-let legacyToken;
-client.maybeRestoreLogin()
-  .then(() => {
-    if (client.isLoggedIn) {
-      return client.getLegacyToken();
-    } else {
-      return null;
-    }
-  })
-  .then((_legacyToken) => {
-    legacyToken = _legacyToken;
-  })
-```
+* At the start of *every* page load, unconditionally call `maybeRestoreLogin`, to attempt to
+  restore a login state; this will no-op if no login is present. Afterwards, get and store HTTP
+  headers for authentication from `authHeaders`.
+  ```js
+  let authHeaders;
+  client.maybeRestoreLogin()
+    .then(() => {
+      authHeaders = client.authHeaders;
+    });
+  ```
 
-```js
-// handle the client signing out
-document.querySelector('#sign-out-link').addEventListener('click', (event) => {
+  or, if using ES6 and `async`/`await`:
+  ```js
+  await client.maybeRestoreLogin();
+  let { authHeaders } = client;
+  ```
+
+* Include these headers with every Ajax API request:
+  ```js
+  fetch('http://localhost:8000/api/files', {
+    headers: authHeaders,
+  });
+  ```
+
+* The login state will persist accross page refreshes. Call `logout` to clear any active login:
+  ```js
+  document.querySelector('#sign-out-link').addEventListener('click', (event) => {
     event.preventDefault();
     client.logout();
-});
-```
+    authHeaders = client.authHeaders;
+  });
+  ```
 
 ## Example app
-
-This repository comes bundled with an [example application](example/index.html). 
-
+This repository comes bundled with an [example application](example/index.html). Run it with:
 ```bash
-$ git clone git@github.com:ImageMarkup/isic-client.git
-$ cd example
-$ yarn install
-$ yarn serve
-
-# visit http://localhost:1234/
+git clone https://github.com/girder/girder-oauth-client.git
+cd example
+yarn install
+yarn serve
+# Visit http://localhost:1234/
 ```
 
-
+## Development
+To develop the library using the example app:
+```bash
+# From the root of the repository
+yarn link
+yarn install
+yarn watch
+```
+In another terminal:
+```bash
+# From the root of the repository
+cd example
+yarn add 
+yarn link '@girder/oauth-client'
+yarn install
+yarn watch
+```

@@ -22,8 +22,7 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
   ```js
   const oauthClient = new OauthClient(
     process.env.OAUTH_API_ROOT, // e.g. 'http://localhost:8000/oauth/'
-    process.env.OAUTH_CLIENT_ID, // e.g. 'Qir0Aq7AKIsAkMDLQe9MEfORbHEBKsViNhAKJf1A'
-    ['identity'], // Token scopes, as defined by the server
+    process.env.OAUTH_CLIENT_ID, // e.g. 'Qir0Aq7AKIsAkMDLQe9MEfORbHEBKsViNhAKJf1A',
   );
   ```
 

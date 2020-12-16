@@ -1,16 +1,16 @@
 {
   "name": "@girder/oauth-client",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "prepublishOnly": "yarn build",
+    "prepublishOnly": "yarn build"
   },
   "files": [
     "/src/",
-    "/dist/",
+    "/dist/"
   ],
   "author": "",
   "license": "Apache-2.0",

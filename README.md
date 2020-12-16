@@ -20,6 +20,8 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
 
 * Instantiate an `OauthClient` with your application-specific configuration:
   ```js
+  import OauthClient from '@girder/oauth-client';
+  
   const oauthClient = new OauthClient(
     process.env.OAUTH_API_ROOT, // e.g. 'http://localhost:8000/oauth/'
     process.env.OAUTH_CLIENT_ID, // e.g. 'Qir0Aq7AKIsAkMDLQe9MEfORbHEBKsViNhAKJf1A',
@@ -30,7 +32,7 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
   ```js
   document.querySelector('#sign-in-link').addEventListener('click', (event) => {
     event.preventDefault();
-    client.redirectToLogin();
+    oauthClient.redirectToLogin();
     // This will redirect away from the current page
   });
   ```
@@ -40,7 +42,7 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
   headers for authentication from `authHeaders`.
   ```js
   let authHeaders;
-  client.maybeRestoreLogin()
+  oauthClient.maybeRestoreLogin()
     .then(() => {
       authHeaders = client.authHeaders;
     });
@@ -48,7 +50,7 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
 
   or, if using ES6 and `async`/`await`:
   ```js
-  await client.maybeRestoreLogin();
+  await oauthClient.maybeRestoreLogin();
   let { authHeaders } = client;
   ```
 

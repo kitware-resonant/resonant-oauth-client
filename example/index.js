@@ -3,7 +3,6 @@ import OauthClient from '@girder/oauth-client';
 const client = new OauthClient(
   'http://localhost:8000/oauth/',
   'Qir0Aq7AKIsAkMDLQe9MEfORbHEBKsViNhAKJf1A',
-  [],
 );
 
 document.querySelector('#sign-in-link')

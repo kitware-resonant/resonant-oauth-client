@@ -14,7 +14,7 @@ export default class OauthClient {
   constructor(
     authorizationServerBaseUrl: string,
     protected readonly clientId: string,
-    scopes: Array<string>,
+    scopes: Array<string> = [],
   ) {
     if (!window.isSecureContext) {
       throw Error('OAuth Client cannot operate within insecure contexts.')

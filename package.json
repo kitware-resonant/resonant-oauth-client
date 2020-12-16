@@ -5,8 +5,13 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "prepublishOnly": "yarn build",
   },
+  "files": [
+    "/src/",
+    "/dist/",
+  ],
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {

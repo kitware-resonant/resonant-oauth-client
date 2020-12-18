@@ -44,7 +44,7 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
   let authHeaders;
   oauthClient.maybeRestoreLogin()
     .then(() => {
-      authHeaders = client.authHeaders;
+      authHeaders = oauthClient.authHeaders;
     });
   ```
 
@@ -65,8 +65,8 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
   ```js
   document.querySelector('#sign-out-link').addEventListener('click', (event) => {
     event.preventDefault();
-    client.logout();
-    authHeaders = client.authHeaders;
+    oauthClient.logout();
+    authHeaders = oauthClient.authHeaders;
   });
   ```
 

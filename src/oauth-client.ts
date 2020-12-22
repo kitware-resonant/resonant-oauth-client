@@ -38,6 +38,9 @@ export default class OauthClient {
     // Load from saved state, after a page refresh
     const token = this.loadToken();
     if (token) {
+      // It's possible to have a race condition where multiple pending login flows in different
+      // windows cause a redirect back to an app that's already logged in; so, clear any parameters.
+      this.removeUrlParameters();
       this.token = token;
       return;
     }
@@ -48,10 +51,15 @@ export default class OauthClient {
     } catch (error) {
       // Anonymous
       return;
+    } finally {
+      // If the login succeeds, the parameters from the redirect should be removed.
+      // If the login recovery fails, it's also possible to have parameters left in the URL,
+      // from an explict error sent by the authorization server.
+      this.removeUrlParameters();
     }
+
     // Finalize return from login flow
     this.storeToken(this.token);
-    this.removeQueryString();
   }
 
   public async logout(): Promise<void> {
@@ -93,7 +101,27 @@ export default class OauthClient {
     }
   }
 
-  protected removeQueryString(): void {
-    window.history.replaceState(null, '', window.location.pathname)
+  /**
+   * Remove Authorization Response parameters from the URL query string.
+   */
+  protected removeUrlParameters(): void {
+    const currentUri = window.location.toString();
+
+    const url = new URL(currentUri);
+    // Possible parameters in an Authorization Response
+    [
+      'code',
+      'state',
+      'error',
+      'error_description',
+      'error_uri',
+    ].forEach((oauthParam) => {
+      url.searchParams.delete(oauthParam);
+    });
+    const newUri = url.toString();
+
+    if (currentUri !== newUri) {
+      window.history.replaceState(null, '', newUri);
+    }
   }
 }

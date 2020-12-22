@@ -21,4 +21,7 @@ oauthClient.maybeRestoreLogin()
   .then(() => {
     document.querySelector('#logged-in').innerHTML = JSON.stringify(oauthClient.isLoggedIn);
     document.querySelector('#auth-headers').innerHTML = JSON.stringify(oauthClient.authHeaders);
+
+    const visibleButtonSelector = oauthClient.isLoggedIn ? '#sign-out-link' : '#sign-in-link';
+    document.querySelector(visibleButtonSelector).style.visibility = 'visible';
   });

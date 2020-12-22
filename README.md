@@ -94,8 +94,7 @@ In another terminal:
 ```bash
 # From the root of the repository
 cd example
-yarn add 
 yarn link '@girder/oauth-client'
 yarn install
-yarn watch
+yarn serve
 ```

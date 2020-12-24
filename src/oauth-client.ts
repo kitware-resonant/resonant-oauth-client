@@ -36,7 +36,7 @@ export default class OauthClient {
     // Returning from an Authorization flow should trump any other source of token recovery.
     try {
       this.token = await this.oauthFacade.finishLogin()
-    } catch (error) {
+    } catch {
       // Most likely, there is no pending Authorization flow.
       // Possibly, there is an Authorization failure, which will be emitted to the
       // console, but doesn't need to be fatal, since this can just proceed with no token.

@@ -1,15 +1,12 @@
 {
+  "extends": "@tsconfig/recommended/tsconfig.json",
   "compilerOptions": {
-    "strict": true,
-    "target": "esnext",
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "module": "esnext",
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "outDir": "./dist",
+    "target": "ES2017",
+    "module": "ES2015",
     "sourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "outDir": "./dist"
   },
   "include": [
     "src/**/*",

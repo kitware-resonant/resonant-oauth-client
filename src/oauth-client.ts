@@ -49,7 +49,7 @@ export default class OauthClient {
 
     if (!this.token) {
       // Try restoring from a locally saved token.
-      this.token = this.loadToken();
+      this.loadToken();
     }
 
     if (this.token && OauthFacade.tokenIsExpired(this.token)) {
@@ -63,16 +63,21 @@ export default class OauthClient {
     }
 
     // Store the token value (which might be null).
-    this.storeToken(this.token);
+    this.storeToken();
   }
 
   public async logout(): Promise<void> {
-    // As a guard against stateful weirdness, always attempt to clear the token from localStorage.
-    this.storeToken(null);
     if (this.token) {
-      await this.oauthFacade.logout(this.token);
-      this.token = null;
+      try {
+        await this.oauthFacade.logout(this.token);
+      } catch (error) {
+        console.error(`Error logging out token: ${error}`);
+      }
     }
+
+    // As a guard against stateful weirdness, always to clear the token.
+    this.token = null;
+    this.storeToken();
   }
 
   public get authHeaders(): Headers  {
@@ -80,7 +85,6 @@ export default class OauthClient {
     if (this.token) {
       headers['Authorization'] = `${this.token.tokenType} ${this.token.accessToken}`;
     }
-    // Return empty value with header?
     return headers;
   }
 
@@ -88,20 +92,16 @@ export default class OauthClient {
     return `oauth-token-${this.clientId}`;
   }
 
-  protected loadToken(): TokenResponse|null {
+  protected loadToken(): void {
     const serializedToken = window.localStorage.getItem(this.tokenStorageKey);
-    if (serializedToken) {
-      return new TokenResponse(JSON.parse(serializedToken));
-    } else {
-      return null;
-    }
+    this.token = serializedToken ? new TokenResponse(JSON.parse(serializedToken)) : null;
   }
 
-  protected storeToken(token: TokenResponse|null) {
-    if (!token) {
+  protected storeToken(): void {
+    if (!this.token) {
       window.localStorage.removeItem(this.tokenStorageKey);
     } else {
-      const serializedToken = JSON.stringify(token.toJson());
+      const serializedToken = JSON.stringify(this.token.toJson());
       window.localStorage.setItem(this.tokenStorageKey, serializedToken);
     }
   }

@@ -5,6 +5,14 @@ const oauthClient = new OauthClient(
   'Qir0Aq7AKIsAkMDLQe9MEfORbHEBKsViNhAKJf1A',
 );
 
+function updateDom() {
+  document.querySelector('#logged-in').innerHTML = JSON.stringify(oauthClient.isLoggedIn);
+  document.querySelector('#auth-headers').innerHTML = JSON.stringify(oauthClient.authHeaders);
+
+  const visibleButtonSelector = oauthClient.isLoggedIn ? '#sign-out-link' : '#sign-in-link';
+  document.querySelector(visibleButtonSelector).style.visibility = 'visible';
+}
+
 document.querySelector('#sign-in-link')
   .addEventListener('click', (event) => {
     event.preventDefault();
@@ -13,15 +21,9 @@ document.querySelector('#sign-in-link')
 document.querySelector('#sign-out-link')
   .addEventListener('click', (event) => {
     event.preventDefault();
-    oauthClient.logout();
-    window.location.reload();
+    oauthClient.logout()
+      .then(updateDom);
   });
 
 oauthClient.maybeRestoreLogin()
-  .then(() => {
-    document.querySelector('#logged-in').innerHTML = JSON.stringify(oauthClient.isLoggedIn);
-    document.querySelector('#auth-headers').innerHTML = JSON.stringify(oauthClient.authHeaders);
-
-    const visibleButtonSelector = oauthClient.isLoggedIn ? '#sign-out-link' : '#sign-in-link';
-    document.querySelector(visibleButtonSelector).style.visibility = 'visible';
-  });
+  .then(updateDom);

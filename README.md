@@ -65,8 +65,10 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
   ```js
   document.querySelector('#sign-out-link').addEventListener('click', (event) => {
     event.preventDefault();
-    oauthClient.logout();
-    authHeaders = oauthClient.authHeaders;
+    oauthClient.logout()
+      .then(() => {
+        authHeaders = oauthClient.authHeaders;
+      });
   });
   ```
 

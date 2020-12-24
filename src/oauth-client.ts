@@ -1,6 +1,4 @@
-import {TokenResponse} from '@openid/appauth';
-
-import OauthFacade from './oauth-facade';
+import OauthFacade, { TokenResponse } from './oauth-facade';
 
 export interface Headers {
   [key: string]: string;

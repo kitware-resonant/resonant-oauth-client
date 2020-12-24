@@ -5,6 +5,7 @@ import {
   BaseTokenRequestHandler,
   FetchRequestor,
   GRANT_TYPE_AUTHORIZATION_CODE,
+  GRANT_TYPE_REFRESH_TOKEN,
   LocalStorageBackend,
   RevokeTokenRequest,
   TokenRequest,
@@ -114,6 +115,18 @@ export default class OauthFacade {
     return this.tokenHandler.performTokenRequest(this.config, tokenRequest);
   }
 
+  public async refresh(token: TokenResponse): Promise<TokenResponse> {
+    const tokenRequest = new TokenRequest({
+      client_id: this.clientId,
+      redirect_uri: this.redirectUrl,
+      grant_type: GRANT_TYPE_REFRESH_TOKEN,
+      refresh_token: token.refreshToken,
+      // Don't specify a new scope, which will implicitly request the same scope as the old token
+    });
+    // Return the new token
+    return this.tokenHandler.performTokenRequest(this.config, tokenRequest);
+  }
+
   /**
    * Revoke an Access Token from the Authorization Server.
    *
@@ -128,4 +141,21 @@ export default class OauthFacade {
     });
     await this.tokenHandler.performRevokeTokenRequest(this.config, revokeTokenRequest);
   }
+
+  /**
+   * Determine whether a given token is expired.
+   */
+  public static tokenIsExpired(token: TokenResponse): boolean {
+    if (token.expiresIn !== undefined) {
+      // Token has a known expiration
+      const expirationDate = new Date((token.issuedAt + token.expiresIn) * 1000);
+      const currentDate = new Date();
+      if (expirationDate > currentDate) {
+        return true;
+      }
+    }
+    // Not expired, or unknowable.
+    return false;
+  }
+
 }

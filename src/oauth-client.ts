@@ -35,35 +35,39 @@ export default class OauthClient {
   }
 
   public async maybeRestoreLogin(): Promise<void> {
-    // Load from saved state, after a page refresh
-    const token = this.loadToken();
-    if (token) {
-      // It's possible to have a race condition where multiple pending login flows in different
-      // windows cause a redirect back to an app that's already logged in; so, clear any parameters.
-      this.removeUrlParameters();
-      this.token = token;
-      return;
-    }
-
-    // Return from login flow
+    // Returning from an Authorization flow should trump any other source of token recovery.
     try {
       this.token = await this.oauthFacade.finishLogin()
     } catch (error) {
-      // Anonymous
-      return;
-    } finally {
-      // If the login succeeds, the parameters from the redirect should be removed.
-      // If the login recovery fails, it's also possible to have parameters left in the URL,
-      // from an explict error sent by the authorization server.
-      this.removeUrlParameters();
+      // Most likely, there is no pending Authorization flow.
+      // Possibly, there is an Authorization failure, which will be emitted to the
+      // console, but doesn't need to be fatal, since this can just proceed with no token.
+    }
+    // Regardless of the outcome, remove any Authorization parameters, since the flow is now
+    // concluded.
+    this.removeUrlParameters();
+
+    if (!this.token) {
+      // Try restoring from a locally saved token.
+      this.token = this.loadToken();
     }
 
-    // Finalize return from login flow
+    if (this.token && OauthFacade.tokenIsExpired(this.token)) {
+      // Need to refresh
+      try {
+        this.token = await this.oauthFacade.refresh(this.token);
+      } catch (error) {
+        console.error(`Error refreshing token: ${error}`);
+        this.token = null;
+      }
+    }
+
+    // Store the token value (which might be null).
     this.storeToken(this.token);
   }
 
   public async logout(): Promise<void> {
-    // As a guard against stateful weirdness, always attempt to clear the token from localStorage
+    // As a guard against stateful weirdness, always attempt to clear the token from localStorage.
     this.storeToken(null);
     if (this.token) {
       await this.oauthFacade.logout(this.token);
@@ -76,6 +80,7 @@ export default class OauthClient {
     if (this.token) {
       headers['Authorization'] = `${this.token.tokenType} ${this.token.accessToken}`;
     }
+    // Return empty value with header?
     return headers;
   }
 

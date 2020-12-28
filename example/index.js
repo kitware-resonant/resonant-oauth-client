@@ -6,11 +6,15 @@ const oauthClient = new OauthClient(
 );
 
 function updateDom() {
-  document.querySelector('#logged-in').innerHTML = JSON.stringify(oauthClient.isLoggedIn);
-  document.querySelector('#auth-headers').innerHTML = JSON.stringify(oauthClient.authHeaders);
+  document.querySelector('#sign-in-link').style.visibility =
+    oauthClient.isLoggedIn ? 'hidden' : 'visible';
+  document.querySelector('#sign-out-link').style.visibility =
+    oauthClient.isLoggedIn ? 'visible' : 'hidden';
 
-  const visibleButtonSelector = oauthClient.isLoggedIn ? '#sign-out-link' : '#sign-in-link';
-  document.querySelector(visibleButtonSelector).style.visibility = 'visible';
+  document.querySelector('#logged-in').innerHTML =
+    JSON.stringify(oauthClient.isLoggedIn);
+  document.querySelector('#auth-headers').innerHTML =
+    JSON.stringify(oauthClient.authHeaders);
 }
 
 document.querySelector('#sign-in-link')
@@ -24,6 +28,8 @@ document.querySelector('#sign-out-link')
     oauthClient.logout()
       .then(updateDom);
   });
+
+updateDom();
 
 oauthClient.maybeRestoreLogin()
   .then(updateDom);

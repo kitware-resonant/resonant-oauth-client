@@ -150,7 +150,7 @@ export default class OauthFacade {
       // Token has a known expiration
       const expirationDate = new Date((token.issuedAt + token.expiresIn) * 1000);
       const currentDate = new Date();
-      if (expirationDate > currentDate) {
+      if (expirationDate <= currentDate) {
         return true;
       }
     }

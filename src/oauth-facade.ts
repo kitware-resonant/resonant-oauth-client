@@ -12,9 +12,9 @@ import {
   TokenResponse,
 } from '@openid/appauth';
 
+import { TokenRequestHandler } from '@openid/appauth/src/token_request_handler';
 import NoHashQueryStringUtils from './query-string-utils';
 import ResolvingRedirectRequestHandler from './resolving-redirect-request-handler';
-import {TokenRequestHandler} from "@openid/appauth/src/token_request_handler";
 
 export { TokenResponse };
 
@@ -25,11 +25,14 @@ export { TokenResponse };
  */
 export default class OauthFacade {
   protected readonly authorizationServerBaseUrl: string;
+
   protected readonly config: AuthorizationServiceConfiguration;
-  protected readonly authHandler: ResolvingRedirectRequestHandler = new ResolvingRedirectRequestHandler(
+
+  protected readonly authHandler = new ResolvingRedirectRequestHandler(
     new LocalStorageBackend(),
     new NoHashQueryStringUtils(),
   );
+
   protected readonly tokenHandler: TokenRequestHandler = new BaseTokenRequestHandler(
     new FetchRequestor(),
   );
@@ -109,7 +112,8 @@ export default class OauthFacade {
       grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
       code: authRequestResponse.response.code,
       extras: {
-        code_verifier: authRequestResponse.request.internal!.code_verifier,
+        // code_verifier should always be specified, but this is a safer runtime check
+        code_verifier: authRequestResponse.request.internal?.code_verifier ?? '',
       },
     });
     return this.tokenHandler.performTokenRequest(this.config, tokenRequest);
@@ -157,5 +161,4 @@ export default class OauthFacade {
     // Not expired, or unknowable.
     return false;
   }
-
 }

@@ -1,0 +1,20 @@
+name: release
+on:
+  release:
+    types: [published]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+      - name: Publish to npm
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          yarn install --frozen-lockfile
+          git describe --tags --match '*[0-9]*' --abbrev=0 | sed 's/^v//' | yarn version --no-git-tag-version
+          echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ./.npmrc
+          yarn publish

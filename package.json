@@ -1,6 +1,6 @@
 {
   "name": "@girder/oauth-client",
-  "version": "0.7.2",
+  "version": "0.0.0",
   "description": "A TypeScript library for performing OAuth login to a Girder 4 (Django) server.",
   "author": "Kitware, Inc. <kitware@kitware.com>",
   "license": "Apache-2.0",
@@ -48,7 +48,14 @@
     ],
     "rules": {
       "no-restricted-syntax": 0,
-      "no-console": ["warn", { "allow": ["error"] }]
+      "no-console": [
+        "warn",
+        {
+          "allow": [
+            "error"
+          ]
+        }
+      ]
     }
   }
 }

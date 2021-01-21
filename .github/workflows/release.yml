@@ -18,5 +18,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           yarn install --frozen-lockfile
+          yarn version --no-git-tag-version --new-version $(git describe --tags --match '*[0-9]*' --abbrev=0 | sed 's/^v//')
           echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ./.npmrc
-          yarn publish --new-version $(git describe --tags --match '*[0-9]*' --abbrev=0 | sed 's/^v//')
+          yarn publish --non-interactive

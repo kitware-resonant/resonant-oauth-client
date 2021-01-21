@@ -1,7 +1,8 @@
-import { BasicQueryStringUtils, LocationLike } from '@openid/appauth';
+import { BasicQueryStringUtils, LocationLike, StringMap } from '@openid/appauth';
 
 export default class NoHashQueryStringUtils extends BasicQueryStringUtils {
-  parse(input: LocationLike, _useHash?: boolean) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  parse(input: LocationLike, _useHash?: boolean): StringMap {
     // Even though it's not explicitly specified by a "response_mode=fragment" parameter, the
     // RedirectRequestHandler expects response parameter to be encoded in the fragment, instead
     // of the query string (which is the specification default).

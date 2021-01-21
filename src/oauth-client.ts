@@ -1,12 +1,14 @@
 import OauthFacade, { TokenResponse } from './oauth-facade';
 
 export interface Headers {
-  [key: string]: string;
+  [name: string]: string;
 }
 
 export default class OauthClient {
   protected readonly authorizationServerBaseUrl: string;
+
   protected token: TokenResponse|null = null;
+
   protected readonly oauthFacade: OauthFacade;
 
   constructor(
@@ -15,13 +17,19 @@ export default class OauthClient {
     scopes: Array<string> = [],
   ) {
     if (!window.isSecureContext) {
-      throw Error('OAuth Client cannot operate within insecure contexts.')
+      throw Error('OAuth Client cannot operate within insecure contexts.');
     }
     // Strip any trailing slash
-    this.authorizationServerBaseUrl = authorizationServerBaseUrl.replace(/\/$/, '');
+    this.authorizationServerBaseUrl = authorizationServerBaseUrl
+      .replace(/\/$/, '');
 
     const currentUri = `${window.location.origin}${window.location.pathname}`;
-    this.oauthFacade = new OauthFacade(this.authorizationServerBaseUrl, currentUri, this.clientId, scopes);
+    this.oauthFacade = new OauthFacade(
+      this.authorizationServerBaseUrl,
+      currentUri,
+      this.clientId,
+      scopes,
+    );
   }
 
   public get isLoggedIn(): boolean {
@@ -35,7 +43,7 @@ export default class OauthClient {
   public async maybeRestoreLogin(): Promise<void> {
     // Returning from an Authorization flow should trump any other source of token recovery.
     try {
-      this.token = await this.oauthFacade.finishLogin()
+      this.token = await this.oauthFacade.finishLogin();
     } catch {
       // Most likely, there is no pending Authorization flow.
       // Possibly, there is an Authorization failure, which will be emitted to the
@@ -78,10 +86,10 @@ export default class OauthClient {
     this.storeToken();
   }
 
-  public get authHeaders(): Headers  {
+  public get authHeaders(): Headers {
     const headers: Headers = {};
     if (this.token) {
-      headers['Authorization'] = `${this.token.tokenType} ${this.token.accessToken}`;
+      headers.Authorization = `${this.token.tokenType} ${this.token.accessToken}`;
     }
     return headers;
   }
@@ -107,6 +115,7 @@ export default class OauthClient {
   /**
    * Remove Authorization Response parameters from the URL query string.
    */
+  // eslint-disable-next-line class-methods-use-this
   protected removeUrlParameters(): void {
     const currentUri = window.location.toString();
 

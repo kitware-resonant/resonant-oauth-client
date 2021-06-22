@@ -7,7 +7,7 @@ export interface Headers {
 export default class OauthClient {
   protected readonly authorizationServerBaseUrl: string;
 
-  protected token: TokenResponse|null = null;
+  protected token: TokenResponse | null = null;
 
   protected readonly oauthFacade: OauthFacade;
 

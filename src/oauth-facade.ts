@@ -49,7 +49,7 @@ export default class OauthFacade {
     authorizationServerBaseUrl: string,
     protected readonly redirectUrl: string,
     protected readonly clientId: string,
-    protected readonly scopes: Array<string>,
+    protected readonly scopes: string[],
   ) {
     // Strip any trailing slash
     this.authorizationServerBaseUrl = authorizationServerBaseUrl

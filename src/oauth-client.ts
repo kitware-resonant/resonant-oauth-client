@@ -4,6 +4,10 @@ export interface Headers {
   [name: string]: string;
 }
 
+export interface OauthClientOptions {
+  redirectUri?: string;
+}
+
 export default class OauthClient {
   protected readonly authorizationServerBaseUrl: string;
 
@@ -15,6 +19,7 @@ export default class OauthClient {
     authorizationServerBaseUrl: string,
     protected readonly clientId: string,
     scopes: string[] = [],
+    options: OauthClientOptions = {},
   ) {
     if (!window.isSecureContext) {
       throw Error('OAuth Client cannot operate within insecure contexts.');
@@ -23,10 +28,9 @@ export default class OauthClient {
     this.authorizationServerBaseUrl = authorizationServerBaseUrl
       .replace(/\/$/, '');
 
-    const currentUri = `${window.location.origin}${window.location.pathname}`;
     this.oauthFacade = new OauthFacade(
       this.authorizationServerBaseUrl,
-      currentUri,
+      options.redirectUri || `${window.location.origin}${window.location.pathname}`,
       this.clientId,
       scopes,
     );

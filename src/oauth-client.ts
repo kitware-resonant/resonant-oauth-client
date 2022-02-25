@@ -30,7 +30,7 @@ export default class OauthClient {
 
     this.oauthFacade = new OauthFacade(
       this.authorizationServerBaseUrl,
-      options.redirectUri || `${window.location.origin}${window.location.pathname}`,
+      options.redirectUri ?? `${window.location.origin}${window.location.pathname}`,
       this.clientId,
       scopes,
     );

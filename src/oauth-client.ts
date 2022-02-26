@@ -5,6 +5,7 @@ export interface Headers {
 }
 
 export interface OauthClientOptions {
+  scopes?: string[];
   redirectUri?: URL;
 }
 
@@ -18,8 +19,8 @@ export default class OauthClient {
   constructor(
     authorizationServerBaseUrl: string,
     protected readonly clientId: string,
-    scopes: string[] = [],
     {
+      scopes = [],
       redirectUri = new URL(window.location.href),
     }: OauthClientOptions = {},
   ) {

@@ -6,7 +6,7 @@ export interface Headers {
 
 export interface OauthClientOptions {
   scopes?: string[];
-  redirectUri?: URL;
+  redirectUrl?: URL;
 }
 
 export default class OauthClient {
@@ -19,7 +19,7 @@ export default class OauthClient {
     protected readonly clientId: string,
     {
       scopes = [],
-      redirectUri = new URL(window.location.href),
+      redirectUrl = new URL(window.location.toString()),
     }: OauthClientOptions = {},
   ) {
     if (!window.isSecureContext) {
@@ -35,12 +35,12 @@ export default class OauthClient {
     cleanedAuthorizationServerBaseUrl.hash = '';
 
     // RFC6749 3.1.2 requires that the Redirection URI must not include a fragment component
-    const cleanedRedirectUri = new URL(redirectUri);
-    cleanedRedirectUri.hash = '';
+    const cleanedRedirectUrl = new URL(redirectUrl);
+    cleanedRedirectUrl.hash = '';
 
     this.oauthFacade = new OauthFacade(
       cleanedAuthorizationServerBaseUrl.toString(),
-      cleanedRedirectUri.toString(),
+      cleanedRedirectUrl.toString(),
       this.clientId,
       scopes,
     );
@@ -131,9 +131,9 @@ export default class OauthClient {
    */
   // eslint-disable-next-line class-methods-use-this
   protected removeUrlParameters(): void {
-    const currentUri = window.location.toString();
+    const currentUrl = window.location.toString();
 
-    const url = new URL(currentUri);
+    const url = new URL(currentUrl);
     // Possible parameters in an Authorization Response
     [
       'code',
@@ -144,10 +144,10 @@ export default class OauthClient {
     ].forEach((oauthParam) => {
       url.searchParams.delete(oauthParam);
     });
-    const newUri = url.toString();
+    const newUrl = url.toString();
 
-    if (currentUri !== newUri) {
-      window.history.replaceState(null, '', newUri);
+    if (currentUrl !== newUrl) {
+      window.history.replaceState(null, '', newUrl);
     }
   }
 }

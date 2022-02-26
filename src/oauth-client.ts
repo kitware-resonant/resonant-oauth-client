@@ -10,14 +10,12 @@ export interface OauthClientOptions {
 }
 
 export default class OauthClient {
-  protected readonly authorizationServerBaseUrl: string;
-
   protected token: TokenResponse | null = null;
 
   protected readonly oauthFacade: OauthFacade;
 
   constructor(
-    authorizationServerBaseUrl: string,
+    authorizationServerBaseUrl: URL,
     protected readonly clientId: string,
     {
       scopes = [],
@@ -27,16 +25,21 @@ export default class OauthClient {
     if (!window.isSecureContext) {
       throw Error('OAuth Client cannot operate within insecure contexts.');
     }
+
+    const cleanedAuthorizationServerBaseUrl = new URL(authorizationServerBaseUrl);
     // Strip any trailing slash
-    this.authorizationServerBaseUrl = authorizationServerBaseUrl
+    cleanedAuthorizationServerBaseUrl.pathname = authorizationServerBaseUrl.pathname
       .replace(/\/$/, '');
+    // A URL base cannot have query string or fragment components
+    cleanedAuthorizationServerBaseUrl.search = '';
+    cleanedAuthorizationServerBaseUrl.hash = '';
 
     // RFC6749 3.1.2 requires that the Redirection URI must not include a fragment component
     const cleanedRedirectUri = new URL(redirectUri);
     cleanedRedirectUri.hash = '';
 
     this.oauthFacade = new OauthFacade(
-      this.authorizationServerBaseUrl,
+      cleanedAuthorizationServerBaseUrl.toString(),
       cleanedRedirectUri.toString(),
       this.clientId,
       scopes,

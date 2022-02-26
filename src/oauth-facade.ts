@@ -24,8 +24,6 @@ export { TokenResponse };
  * This wraps some messy details of low-level library usage.
  */
 export default class OauthFacade {
-  protected readonly authorizationServerBaseUrl: string;
-
   protected readonly config: AuthorizationServiceConfiguration;
 
   protected readonly authHandler = new ResolvingRedirectRequestHandler(
@@ -40,20 +38,18 @@ export default class OauthFacade {
   /**
    * Create an OauthFacade.
    *
-   * @param authorizationServerBaseUrl The common base URL for Authorization Server endpoints.
+   * @param authorizationServerBaseUrl The common base URL for Authorization Server endpoints,
+   *                                   without a trailing slash.
    * @param redirectUrl The URL of the current page, to be redirected back to after authorization.
    * @param clientId The Client ID for this application.
    * @param scopes An array of scopes to request access to.
    */
   constructor(
-    authorizationServerBaseUrl: string,
+    protected readonly authorizationServerBaseUrl: string,
     protected readonly redirectUrl: string,
     protected readonly clientId: string,
     protected readonly scopes: string[],
   ) {
-    // Strip any trailing slash
-    this.authorizationServerBaseUrl = authorizationServerBaseUrl
-      .replace(/\/$/, '');
     this.config = new AuthorizationServiceConfiguration({
       authorization_endpoint: this.authorizationEndpoint,
       token_endpoint: this.tokenEndpoint,

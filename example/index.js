@@ -1,7 +1,7 @@
 import OauthClient from '@girder/oauth-client';
 
 const oauthClient = new OauthClient(
-  'http://localhost:8000/oauth/',
+  new URL('http://localhost:8000/oauth/'),
   'Qir0Aq7AKIsAkMDLQe9MEfORbHEBKsViNhAKJf1A',
 );
 

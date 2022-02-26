@@ -5,7 +5,7 @@ export interface Headers {
 }
 
 export interface OauthClientOptions {
-  redirectUri?: string;
+  redirectUri?: URL;
 }
 
 export default class OauthClient {
@@ -19,7 +19,9 @@ export default class OauthClient {
     authorizationServerBaseUrl: string,
     protected readonly clientId: string,
     scopes: string[] = [],
-    options: OauthClientOptions = {},
+    {
+      redirectUri = new URL(window.location.href),
+    }: OauthClientOptions = {},
   ) {
     if (!window.isSecureContext) {
       throw Error('OAuth Client cannot operate within insecure contexts.');
@@ -28,9 +30,13 @@ export default class OauthClient {
     this.authorizationServerBaseUrl = authorizationServerBaseUrl
       .replace(/\/$/, '');
 
+    // RFC6749 3.1.2 requires that the Redirection URI must not include a fragment component
+    const cleanedRedirectUri = new URL(redirectUri);
+    cleanedRedirectUri.hash = '';
+
     this.oauthFacade = new OauthFacade(
       this.authorizationServerBaseUrl,
-      options.redirectUri ?? `${window.location.origin}${window.location.pathname}`,
+      cleanedRedirectUri.toString(),
       this.clientId,
       scopes,
     );

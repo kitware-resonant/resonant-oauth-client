@@ -10,7 +10,7 @@
     "@girder/oauth-client": "file:.."
   },
   "devDependencies": {
-    "parcel": "^2.2.1"
+    "parcel": "^2.3.2"
   },
   "browserslist": [
     "last 1 chrome version",

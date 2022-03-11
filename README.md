@@ -7,6 +7,23 @@ A TypeScript library for performing OAuth login to a Girder 4 (Django) server.
 This provides support for authenticating with Girder 4 servers,
 using the OAuth2.0 Authorization Code Grant with PKCE flow.
 
+## Overview
+
+JavaScript client authentication will generally work like this.
+
+* User clicks LogIn
+* Client redirects to a Django Oauth backend and the user enters login details into a traditional Django login form
+* Django generates a token and redirects back to the JS client with the token in the query string.
+* The JavaScript client reads the token from the query string, places it in localStorage, and erases it from the query.
+* The client's browser will now have a token in localStorage for use by the web client and `same-site` cookies set by Django.
+
+Token refresh will work like this.
+
+* If the token expires while the browser is cloesd, it will be refreshed by `maybeRestorelogin()` next time the page is opened.
+* If it expires during active use, REST requests will start to fail, and the client is responsible for handling errors and refreshing the token.  This is statistically unlikely.
+
+The server will always allow refresh for any token that hasn't been explicitly revoked.
+
 ## Usage
 * Install the library:
   ```bash

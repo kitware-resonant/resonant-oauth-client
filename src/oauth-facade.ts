@@ -101,6 +101,17 @@ export default class OauthFacade {
     // Fetch a valid auth response (or throw)
     const authRequestResponse = await this.authHandler.resolveAuthorizationRequest();
 
+    // We have discovered in practice that @openid/appauth fails to properly clean up its
+    // storage entries in some cases. We add this hack to manually garbage collect all
+    // outstanding storage entries that the upstream library has left behind. Note that this
+    // depends on implementation details of both this class (namely the use of LocalStorageBackend)
+    // as well as of @openid/appauth (namely its storage key name conventions).
+    // The relevant upstream code is found in this module:
+    // https://github.com/openid/AppAuth-JS/blob/c30f85e490ab41c9f1e8f8ee05bfdfe964e08626/src/redirect_based_handler.ts
+    Object.keys(localStorage).filter((key) => key.includes('appauth_authorization')).forEach((key) => {
+      localStorage.removeItem(key);
+    });
+
     // Exchange for an access token and return tokenResponse
     const tokenRequest = new TokenRequest({
       client_id: this.clientId,

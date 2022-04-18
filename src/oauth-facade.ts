@@ -106,6 +106,8 @@ export default class OauthFacade {
     // outstanding storage entries that the upstream library has left behind. Note that this
     // depends on implementation details of both this class (namely the use of LocalStorageBackend)
     // as well as of @openid/appauth (namely its storage key name conventions).
+    // The relevant upstream code is found in this module:
+    // https://github.com/openid/AppAuth-JS/blob/c30f85e490ab41c9f1e8f8ee05bfdfe964e08626/src/redirect_based_handler.ts
     Object.keys(localStorage).filter((key) => key.includes('appauth_authorization')).forEach((key) => {
       localStorage.removeItem(key);
     });

@@ -1,26 +1,22 @@
-# girder-oauth-client
-[![npm (scoped)](https://img.shields.io/npm/v/@girder/oauth-client)](https://www.npmjs.com/package/@girder/oauth-client)
+# resonant-oauth-client
+[![npm (scoped)](https://img.shields.io/npm/v/@resonant/oauth-client)](https://www.npmjs.com/package/@resonant/oauth-client)
 
-A TypeScript library for performing OAuth login to a Girder 4 (Django) server.
+A TypeScript library for performing OAuth login to a Resonant server.
 
 ## Description
-This provides support for authenticating with Girder 4 servers,
+This provides support for authenticating with Resonant servers,
 using the OAuth2.0 Authorization Code Grant with PKCE flow.
 
 ## Usage
 * Install the library:
-  ```bash
-  yarn add @girder/oauth-client
-  ```
 
-  or if you're using npm:
   ```bash
-  npm install @girder/oauth-client
+  npm install @resonant/oauth-client
   ```
 
 * Instantiate an `OauthClient` with your application-specific configuration:
   ```js
-  import OauthClient from '@girder/oauth-client';
+  import OauthClient from '@resonant/oauth-client';
 
   const oauthClient = new OauthClient(
     new URL(process.env.OAUTH_API_ROOT), // e.g. 'http://localhost:8000/oauth/'
@@ -75,7 +71,7 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
 ## Example app
 This repository comes bundled with an [example application](example/index.html). Run it with:
 ```bash
-git clone https://github.com/girder/girder-oauth-client.git
+git clone https://github.com/kitware-resonant/resonant-oauth-client.git
 yarn install
 yarn build
 cd example
@@ -96,7 +92,7 @@ In another terminal:
 ```bash
 # From the root of the repository
 cd example
-yarn link '@girder/oauth-client'
+yarn link '@resonant/oauth-client'
 yarn install
 yarn serve
 ```

@@ -1,7 +1,7 @@
 {
-  "name": "@girder/oauth-client",
+  "name": "@resonant/oauth-client",
   "version": "0.0.0",
-  "description": "A TypeScript library for performing OAuth login to a Girder 4 (Django) server.",
+  "description": "A TypeScript library for performing OAuth login to a Resonant server.",
   "author": "Kitware, Inc. <kitware@kitware.com>",
   "license": "Apache-2.0",
   "main": "dist/index.js",

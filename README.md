@@ -51,7 +51,7 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
   or, if using ES6 and `async`/`await`:
   ```js
   await oauthClient.maybeRestoreLogin();
-  let { authHeaders } = client;
+  const { authHeaders } = oauthClient;
   ```
 
 * Include these headers with every Ajax API request:

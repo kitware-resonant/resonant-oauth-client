@@ -5,15 +5,16 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: release
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           # Tags are needed to compute the current version number
           fetch-depth: 0
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: "16.x"
+          node-version: current
       - name: Publish to npm
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,4 +1,4 @@
-import { BasicQueryStringUtils, LocationLike, StringMap } from '@openid/appauth';
+import { BasicQueryStringUtils, type LocationLike, type StringMap } from '@openid/appauth';
 
 export default class NoHashQueryStringUtils extends BasicQueryStringUtils {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

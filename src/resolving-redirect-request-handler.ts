@@ -1,10 +1,10 @@
-import { AuthorizationResponse, RedirectRequestHandler } from '@openid/appauth';
-import { AuthorizationRequest } from '@openid/appauth/built/authorization_request';
+import { type AuthorizationResponse, RedirectRequestHandler } from '@openid/appauth';
+import type { AuthorizationRequest } from '@openid/appauth/built/authorization_request';
 
-export interface SuccessfulAuthorizationRequestResponse {
+export type SuccessfulAuthorizationRequestResponse = {
   request: AuthorizationRequest;
   response: AuthorizationResponse;
-}
+};
 
 export default class ResolvingRedirectRequestHandler extends RedirectRequestHandler {
   /**

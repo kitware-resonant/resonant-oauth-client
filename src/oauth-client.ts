@@ -1,13 +1,11 @@
-import OauthFacade, { TokenResponse } from './oauth-facade';
+import OauthFacade, { TokenResponse, type TokenResponseJson } from './oauth-facade';
 
-export interface Headers {
-  [name: string]: string;
-}
+export type Headers = Record<string, string>;
 
-export interface OauthClientOptions {
+export type OauthClientOptions = {
   scopes?: string[];
   redirectUrl?: URL;
-}
+};
 
 export default class OauthClient {
   protected token: TokenResponse | null = null;
@@ -23,7 +21,7 @@ export default class OauthClient {
     }: OauthClientOptions = {},
   ) {
     if (!window.isSecureContext) {
-      throw Error('OAuth Client cannot operate within insecure contexts.');
+      throw new Error('OAuth Client cannot operate within insecure contexts.');
     }
 
     const cleanedAuthorizationServerBaseUrl = new URL(authorizationServerBaseUrl);
@@ -114,15 +112,17 @@ export default class OauthClient {
 
   protected loadToken(): void {
     const serializedToken = window.localStorage.getItem(this.tokenStorageKey);
-    this.token = serializedToken ? new TokenResponse(JSON.parse(serializedToken)) : null;
+    this.token = serializedToken
+      ? new TokenResponse(JSON.parse(serializedToken) as TokenResponseJson)
+      : null;
   }
 
   protected storeToken(): void {
-    if (!this.token) {
-      window.localStorage.removeItem(this.tokenStorageKey);
-    } else {
+    if (this.token) {
       const serializedToken = JSON.stringify(this.token.toJson());
       window.localStorage.setItem(this.tokenStorageKey, serializedToken);
+    } else {
+      window.localStorage.removeItem(this.tokenStorageKey);
     }
   }
 
@@ -135,15 +135,16 @@ export default class OauthClient {
 
     const url = new URL(currentUrl);
     // Possible parameters in an Authorization Response
-    [
+    const oauthParameters = [
       'code',
       'state',
       'error',
       'error_description',
       'error_uri',
-    ].forEach((oauthParam) => {
-      url.searchParams.delete(oauthParam);
-    });
+    ];
+    for (const oauthParameter of oauthParameters) {
+      url.searchParams.delete(oauthParameter);
+    }
     const newUrl = url.toString();
 
     if (currentUrl !== newUrl) {

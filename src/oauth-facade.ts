@@ -4,6 +4,7 @@ import {
   AuthorizationServiceConfiguration,
   BaseTokenRequestHandler,
   FetchRequestor,
+  Flags,
   GRANT_TYPE_AUTHORIZATION_CODE,
   GRANT_TYPE_REFRESH_TOKEN,
   LocalStorageBackend,
@@ -12,11 +13,14 @@ import {
   TokenResponse,
 } from '@openid/appauth';
 
-import { TokenRequestHandler } from '@openid/appauth/src/token_request_handler';
+import type { TokenRequestHandler } from '@openid/appauth/src/token_request_handler';
 import NoHashQueryStringUtils from './query-string-utils';
 import ResolvingRedirectRequestHandler from './resolving-redirect-request-handler';
 
-export { TokenResponse };
+export { TokenResponse, type TokenResponseJson } from '@openid/appauth';
+
+// Disable console logging from @openid/appauth
+Flags.IS_LOG = false;
 
 /**
  * A stateless manager for OAuth server interaction.

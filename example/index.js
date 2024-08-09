@@ -1,4 +1,4 @@
-import OauthClient from '@girder/oauth-client';
+import OauthClient from '@resonant/oauth-client';
 
 const oauthClient = new OauthClient(
   new URL('http://localhost:8000/oauth/'),

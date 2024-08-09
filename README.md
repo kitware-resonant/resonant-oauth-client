@@ -1,26 +1,22 @@
-# girder-oauth-client
-[![npm (scoped)](https://img.shields.io/npm/v/@girder/oauth-client)](https://www.npmjs.com/package/@girder/oauth-client)
+# resonant-oauth-client
+[![npm (scoped)](https://img.shields.io/npm/v/@resonant/oauth-client)](https://www.npmjs.com/package/@resonant/oauth-client)
 
-A TypeScript library for performing OAuth login to a Girder 4 (Django) server.
+A TypeScript library for performing OAuth login to a Resonant server.
 
 ## Description
-This provides support for authenticating with Girder 4 servers,
+This provides support for authenticating with Resonant servers,
 using the OAuth2.0 Authorization Code Grant with PKCE flow.
 
 ## Usage
 * Install the library:
-  ```bash
-  yarn add @girder/oauth-client
-  ```
 
-  or if you're using npm:
   ```bash
-  npm install @girder/oauth-client
+  npm install @resonant/oauth-client
   ```
 
 * Instantiate an `OauthClient` with your application-specific configuration:
   ```js
-  import OauthClient from '@girder/oauth-client';
+  import OauthClient from '@resonant/oauth-client';
 
   const oauthClient = new OauthClient(
     new URL(process.env.OAUTH_API_ROOT), // e.g. 'http://localhost:8000/oauth/'
@@ -51,7 +47,7 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
   or, if using ES6 and `async`/`await`:
   ```js
   await oauthClient.maybeRestoreLogin();
-  let { authHeaders } = client;
+  const { authHeaders } = oauthClient;
   ```
 
 * Include these headers with every Ajax API request:
@@ -75,12 +71,12 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
 ## Example app
 This repository comes bundled with an [example application](example/index.html). Run it with:
 ```bash
-git clone https://github.com/girder/girder-oauth-client.git
-yarn install
-yarn build
+git clone https://github.com/kitware-resonant/resonant-oauth-client.git
+npm install
+npm run build
 cd example
-yarn install
-yarn serve
+npm install
+npm run serve
 # Visit http://localhost:1234/
 ```
 
@@ -88,15 +84,13 @@ yarn serve
 To develop the library using the example app:
 ```bash
 # From the root of the repository
-yarn link
-yarn install
-yarn watch
+npm install
+npm run watch
 ```
 In another terminal:
 ```bash
 # From the root of the repository
 cd example
-yarn link '@girder/oauth-client'
-yarn install
-yarn serve
+npm install
+npm run serve
 ```

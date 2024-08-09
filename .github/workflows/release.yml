@@ -15,11 +15,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: current
+          # Configures authentication to read from env.NODE_AUTH_TOKEN
+          registry-url: 'https://registry.npmjs.org'
       - name: Publish to npm
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm ci
           npm version --no-git-tag-version $(git describe --tags --match '*[0-9]*' --abbrev=0 | sed 's/^v//')
-          echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ./.npmrc
           npm publish --access public

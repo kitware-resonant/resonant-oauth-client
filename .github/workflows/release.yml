@@ -6,6 +6,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     environment: release
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,4 +26,4 @@ jobs:
         run: |
           npm ci
           npm version --no-git-tag-version $(git describe --tags --match '*[0-9]*' --abbrev=0 | sed 's/^v//')
-          npm publish --access public
+          npm publish --access public --provenance

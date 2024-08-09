@@ -4,13 +4,13 @@
   "private": true,
   "license": "Apache-2.0",
   "scripts": {
-    "serve": "parcel index.html"
+    "serve": "parcel --watch-dir .. index.html"
   },
   "dependencies": {
     "@resonant/oauth-client": "file:.."
   },
   "devDependencies": {
-    "parcel": "^2.3.2"
+    "parcel": "^2.12.0"
   },
   "browserslist": [
     "last 1 chrome version",

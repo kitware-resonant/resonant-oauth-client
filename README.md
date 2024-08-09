@@ -72,11 +72,11 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
 This repository comes bundled with an [example application](example/index.html). Run it with:
 ```bash
 git clone https://github.com/kitware-resonant/resonant-oauth-client.git
-yarn install
-yarn build
+npm install
+npm run build
 cd example
-yarn install
-yarn serve
+npm install
+npm run serve
 # Visit http://localhost:1234/
 ```
 
@@ -84,15 +84,13 @@ yarn serve
 To develop the library using the example app:
 ```bash
 # From the root of the repository
-yarn link
-yarn install
-yarn watch
+npm install
+npm run watch
 ```
 In another terminal:
 ```bash
 # From the root of the repository
 cd example
-yarn link '@resonant/oauth-client'
-yarn install
-yarn serve
+npm install
+npm run serve
 ```

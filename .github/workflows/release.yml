@@ -19,7 +19,7 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          yarn install --frozen-lockfile
-          yarn version --no-git-tag-version --new-version $(git describe --tags --match '*[0-9]*' --abbrev=0 | sed 's/^v//')
+          npm ci
+          npm version --no-git-tag-version $(git describe --tags --match '*[0-9]*' --abbrev=0 | sed 's/^v//')
           echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ./.npmrc
-          yarn publish --non-interactive
+          npm publish

@@ -15,6 +15,6 @@ jobs:
           node-version: current
       - name: Build and test
         run: |
-          yarn install --frozen-lockfile
-          yarn run build
-          yarn run lint
+          npm ci
+          npm run build
+          npm run lint

@@ -20,6 +20,9 @@
     "build": "npm-run-all build:clean build:compile",
     "prepack": "npm-run-all build"
   },
+  "engines": {
+    "node": ">=16"
+  },
   "dependencies": {
     "@openid/appauth": "^1.3.2"
   },

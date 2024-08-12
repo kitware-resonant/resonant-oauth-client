@@ -6,6 +6,9 @@
   "author": "Kitware, Inc. <kitware@kitware.com>",
   "license": "Apache-2.0",
   "type": "module",
+  "engines": {
+    "node": ">=16"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -19,9 +22,6 @@
     "build:compile": "tsc",
     "build": "npm-run-all build:clean build:compile",
     "prepack": "npm-run-all build"
-  },
-  "engines": {
-    "node": ">=16"
   },
   "dependencies": {
     "@openid/appauth": "^1.3.2"

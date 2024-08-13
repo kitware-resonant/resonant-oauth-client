@@ -14,7 +14,7 @@ import {
 } from '@openid/appauth';
 
 import type { TokenRequestHandler } from '@openid/appauth/src/token_request_handler';
-import NoHashQueryStringUtils from './query-string-utils';
+import NoHashQueryStringUtils from './no-hash-query-string-utils';
 import ResolvingRedirectRequestHandler from './resolving-redirect-request-handler';
 
 export { TokenResponse, type TokenResponseJson } from '@openid/appauth';

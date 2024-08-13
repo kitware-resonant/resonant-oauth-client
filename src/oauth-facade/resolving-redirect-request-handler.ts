@@ -1,5 +1,6 @@
 import { type AuthorizationResponse, RedirectRequestHandler } from '@openid/appauth';
 import type { AuthorizationRequest } from '@openid/appauth/built/authorization_request';
+import IterableLocalStorageBackend from './iterable-local-storage-backend';
 
 export type SuccessfulAuthorizationRequestResponse = {
   request: AuthorizationRequest;
@@ -7,6 +8,12 @@ export type SuccessfulAuthorizationRequestResponse = {
 };
 
 export default class ResolvingRedirectRequestHandler extends RedirectRequestHandler {
+  public storageBackend: IterableLocalStorageBackend = new IterableLocalStorageBackend();
+
+  // Technically, we should reimplement the constructor here, to guarantee that an
+  // IterableLocalStorageBackend is passed, but this class is only instantiated internally, and
+  // reimplementing would be less maintainable.
+
   /**
    * Return a Promise, guaranteed to always resolve with valid AuthorizationRequest and
    * AuthorizationResponse data, or reject.
@@ -24,7 +31,7 @@ export default class ResolvingRedirectRequestHandler extends RedirectRequestHand
         throw new Error('Authorization incomplete.');
       }
     } finally {
-      ResolvingRedirectRequestHandler.purgeStorage();
+      await this.purgeStorage();
     }
 
     const { response } = authorizationRequestResponse;
@@ -48,26 +55,20 @@ export default class ResolvingRedirectRequestHandler extends RedirectRequestHand
     };
   }
 
-  protected static purgeStorage(): void {
+  protected async purgeStorage(): Promise<void> {
     // We have discovered in practice that @openid/appauth fails to properly clean up its
     // storage entries in some cases, namely anytime there is an error in the OAuth flow. We
     // add this hack to manually garbage collect all outstanding storage entries that the
-    // upstream library may have left behind. Note that this fix violates modularity in two
-    // relevant ways:
-    // 1. The abstraction of StorageBackends should be respected by accessing "this.storageBackend",
-    //    but that class provides no way to enumerate its keys, and it can't be easily extended
-    //    (due to private instead of protected fields), so this accesses "localStorage" directly.
-    // 2. The key names are private symbols from this module:
-    //    https://github.com/openid/AppAuth-JS/blob/c30f85e490ab41c9f1e8f8ee05bfdfe964e08626/src/redirect_based_handler.ts
-    const oldKeys = [
-      'appauth_current_authorization_request',
-      // We want to clean up entries that may have been left behind by potentially multiple
-      // previous failed attempts, so we go nuclear and destroy any appauth_authorization items.
-      ...Object.keys(localStorage)
-        .filter((key) => key.includes('appauth_authorization')),
-    ];
-    oldKeys.forEach((key) => {
-      localStorage.removeItem(key);
-    });
+    // upstream library may have left behind. Note that this fix violates modularity, as
+    // the key names are private symbols from this module:
+    // https://github.com/openid/AppAuth-JS/blob/c30f85e490ab41c9f1e8f8ee05bfdfe964e08626/src/redirect_based_handler.ts
+    await this.storageBackend.removeItem('appauth_current_authorization_request');
+    // We want to clean up entries that may have been left behind by potentially multiple
+    // previous failed attempts, so we go nuclear and destroy any appauth_authorization items.
+    for await (const [key, value] of this.storageBackend) {
+      if (key.includes('appauth_authorization')) {
+        await this.storageBackend.removeItem(key);
+      }
+    }
   }
 }

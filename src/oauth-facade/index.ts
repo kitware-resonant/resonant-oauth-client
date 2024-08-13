@@ -7,7 +7,6 @@ import {
   Flags,
   GRANT_TYPE_AUTHORIZATION_CODE,
   GRANT_TYPE_REFRESH_TOKEN,
-  LocalStorageBackend,
   RevokeTokenRequest,
   TokenRequest,
   TokenResponse,
@@ -16,6 +15,7 @@ import {
 import type { TokenRequestHandler } from '@openid/appauth/src/token_request_handler';
 import NoHashQueryStringUtils from './no-hash-query-string-utils';
 import ResolvingRedirectRequestHandler from './resolving-redirect-request-handler';
+import IterableLocalStorageBackend from './storage';
 
 export { TokenResponse, type TokenResponseJson } from '@openid/appauth';
 
@@ -31,7 +31,7 @@ export default class OauthFacade {
   protected readonly config: AuthorizationServiceConfiguration;
 
   protected readonly authHandler = new ResolvingRedirectRequestHandler(
-    new LocalStorageBackend(),
+    new IterableLocalStorageBackend(),
     new NoHashQueryStringUtils(),
   );
 

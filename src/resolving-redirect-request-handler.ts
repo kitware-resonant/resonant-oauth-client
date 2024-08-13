@@ -14,7 +14,7 @@ export default class ResolvingRedirectRequestHandler extends RedirectRequestHand
    * This fulfills the same role as completeAuthorizationRequestIfPossible, but returns data
    * via a Promise instead of a callback and provides additional error handling.
    */
-  async resolveAuthorizationRequest(): Promise<SuccessfulAuthorizationRequestResponse> {
+  public async resolveAuthorizationRequest(): Promise<SuccessfulAuthorizationRequestResponse> {
     let authorizationRequestResponse;
     try {
       authorizationRequestResponse = await this.completeAuthorizationRequest();
@@ -24,22 +24,7 @@ export default class ResolvingRedirectRequestHandler extends RedirectRequestHand
         throw new Error('Authorization incomplete.');
       }
     } finally {
-      // We have discovered in practice that @openid/appauth fails to properly clean up its
-      // storage entries in some cases, namely anytime there is an error in the OAuth flow. We
-      // add this hack to manually garbage collect all outstanding storage entries that the
-      // upstream library may have left behind. Note that this fix violates modularity in two
-      // relevant ways:
-      // 1. The storage implementation is a separate module and technically not a concern of
-      //    this class, however the best place to trigger the end of the storage entry lifecycle
-      //    is just after calling `completeAuthorizationRequest`.
-      // 2. The localStorage key names are private symbols from this module:
-      //    https://github.com/openid/AppAuth-JS/blob/c30f85e490ab41c9f1e8f8ee05bfdfe964e08626/src/redirect_based_handler.ts
-      localStorage.removeItem('appauth_current_authorization_request');
-      // We want to clean up entries that may have been left behind by potentially multiple
-      // previous failed attempts, so we go nuclear and destroy any appauth_authorization items.
-      Object.keys(localStorage).filter((key) => key.includes('appauth_authorization')).forEach((key) => {
-        localStorage.removeItem(key);
-      });
+      ResolvingRedirectRequestHandler.purgeStorage();
     }
 
     const { response } = authorizationRequestResponse;
@@ -61,5 +46,28 @@ export default class ResolvingRedirectRequestHandler extends RedirectRequestHand
       request,
       response,
     };
+  }
+
+  protected static purgeStorage(): void {
+    // We have discovered in practice that @openid/appauth fails to properly clean up its
+    // storage entries in some cases, namely anytime there is an error in the OAuth flow. We
+    // add this hack to manually garbage collect all outstanding storage entries that the
+    // upstream library may have left behind. Note that this fix violates modularity in two
+    // relevant ways:
+    // 1. The abstraction of StorageBackends should be respected by accessing "this.storageBackend",
+    //    but that class provides no way to enumerate its keys, and it can't be easily extended
+    //    (due to private instead of protected fields), so this accesses "localStorage" directly.
+    // 2. The key names are private symbols from this module:
+    //    https://github.com/openid/AppAuth-JS/blob/c30f85e490ab41c9f1e8f8ee05bfdfe964e08626/src/redirect_based_handler.ts
+    const oldKeys = [
+      'appauth_current_authorization_request',
+      // We want to clean up entries that may have been left behind by potentially multiple
+      // previous failed attempts, so we go nuclear and destroy any appauth_authorization items.
+      ...Object.keys(localStorage)
+        .filter((key) => key.includes('appauth_authorization')),
+    ];
+    oldKeys.forEach((key) => {
+      localStorage.removeItem(key);
+    });
   }
 }

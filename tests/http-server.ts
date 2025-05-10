@@ -1,4 +1,4 @@
-import { http, HttpResponse, StrictRequest, DefaultBodyType } from 'msw';
+import { http, HttpResponse, StrictRequest, DefaultBodyType, JsonBodyType } from 'msw';
 import { setupServer } from 'msw/node';
 import OAuth2Server from '@node-oauth/oauth2-server';
 
@@ -27,7 +27,7 @@ async function mswRequestToOauth(request: StrictRequest<DefaultBodyType>): Promi
   });
 }
 
-function oauthResponseToMsw(oauthResponse: OAuth2Server.Response): HttpResponse {
+function oauthResponseToMsw(oauthResponse: OAuth2Server.Response): HttpResponse<JsonBodyType> {
   return HttpResponse.json(oauthResponse.body, {
     status: oauthResponse.status,
     headers: oauthResponse.headers,

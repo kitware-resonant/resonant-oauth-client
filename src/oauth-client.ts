@@ -74,6 +74,7 @@ export default class OauthClient {
         this.token = await this.oauthFacade.refresh(this.token);
       } catch (error) {
         this.token = null;
+        this.storeToken();
         throw error;
       }
     }

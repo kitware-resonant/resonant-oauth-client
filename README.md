@@ -15,7 +15,7 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
   ```
 
 * Instantiate an `OauthClient` with your application-specific configuration:
-  ```js
+  ```typescript
   import OauthClient from '@resonant/oauth-client';
 
   const oauthClient = new OauthClient(
@@ -25,10 +25,10 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
   ```
 
 * Call `redirectToLogin` when it's time to start a login flow:
-  ```js
-  document.querySelector('#sign-in-link').addEventListener('click', (event) => {
+  ```typescript
+  document.querySelector('#sign-in-link').addEventListener('click', async (event) => {
     event.preventDefault();
-    oauthClient.redirectToLogin();
+    await oauthClient.redirectToLogin();
     // This will redirect away from the current page
   });
   ```
@@ -36,35 +36,24 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
 * At the start of *every* page load, unconditionally call `maybeRestoreLogin`, to attempt to
   restore a login state; this will no-op if no login is present. Afterwards, get and store HTTP
   headers for authentication from `authHeaders`.
-  ```js
-  let authHeaders;
-  oauthClient.maybeRestoreLogin()
-    .then(() => {
-      authHeaders = oauthClient.authHeaders;
-    });
-  ```
-
-  or, if using ES6 and `async`/`await`:
-  ```js
+  ```typescript
   await oauthClient.maybeRestoreLogin();
   const { authHeaders } = oauthClient;
   ```
 
 * Include these headers with every Ajax API request:
-  ```js
+  ```typescript
   fetch('http://localhost:8000/api/files', {
     headers: authHeaders,
   });
   ```
 
 * The login state will persist across page refreshes. Call `logout` to clear any active login:
-  ```js
-  document.querySelector('#sign-out-link').addEventListener('click', (event) => {
+  ```typescript
+  document.querySelector('#sign-out-link').addEventListener('click', async (event) => {
     event.preventDefault();
-    oauthClient.logout()
-      .then(() => {
-        authHeaders = oauthClient.authHeaders;
-      });
+    await oauthClient.logout()
+    authHeaders = oauthClient.authHeaders;
   });
   ```
 

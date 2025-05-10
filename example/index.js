@@ -18,18 +18,19 @@ function updateDom() {
 }
 
 document.querySelector('#sign-in-link')
-  .addEventListener('click', (event) => {
+  .addEventListener('click', async (event) => {
     event.preventDefault();
-    oauthClient.redirectToLogin();
+    await oauthClient.redirectToLogin();
   });
 document.querySelector('#sign-out-link')
-  .addEventListener('click', (event) => {
+  .addEventListener('click', async (event) => {
     event.preventDefault();
-    oauthClient.logout()
-      .then(updateDom);
+    await oauthClient.logout();
+    updateDom();
   });
 
-updateDom();
-
-oauthClient.maybeRestoreLogin()
-  .then(updateDom);
+document.addEventListener('DOMContentLoaded', async () => {
+  updateDom();
+  await oauthClient.maybeRestoreLogin();
+  updateDom();
+});

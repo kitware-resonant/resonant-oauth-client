@@ -1,9 +1,10 @@
-import { FetchRequestor, AppAuthError } from '@openid/appauth';
+import { AppAuthError, FetchRequestor } from '@openid/appauth';
+import type JQuery from 'jquery';
 
 // Unlike the upstream FetchRequestor, this returns the full response body on 400 or 401 status,
 // which is how RFC 6749 5.2 requires Access Token Error Responses to be sent.
 export default class OauthFetchRequestor extends FetchRequestor {
-  private static toHeaders(settings: JQueryAjaxSettings) {
+  private static toHeaders(settings: JQuery.AjaxSettings) {
     const newHeaders = new Headers();
     for (const [key, value] of Object.entries(settings.headers ?? {})) {
       // Using != also removes undefined
@@ -14,7 +15,7 @@ export default class OauthFetchRequestor extends FetchRequestor {
     return newHeaders;
   }
 
-  private static toFormData(settings: JQueryAjaxSettings): FormData | string | undefined {
+  private static toFormData(settings: JQuery.AjaxSettings): FormData | string | undefined {
     if (!settings.data) {
       return undefined;
     }
@@ -28,16 +29,13 @@ export default class OauthFetchRequestor extends FetchRequestor {
     return formData;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  public async xhr<T>(settings: JQueryAjaxSettings): Promise<T> {
+  public async xhr<T>(settings: JQuery.AjaxSettings): Promise<T> {
     if (!settings.url) {
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
       throw new AppAuthError('A URL must be provided.');
     }
     if (settings.method?.toUpperCase() !== 'POST') {
       // RFC 6749 3.2: The client MUST use the HTTP "POST" method when making access token
       // requests.
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
       throw new AppAuthError('Only POST is allowed for token requests.');
     }
 
@@ -47,7 +45,6 @@ export default class OauthFetchRequestor extends FetchRequestor {
       body: OauthFetchRequestor.toFormData(settings),
     });
     if (response.status >= 500) {
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
       throw new AppAuthError(`${response.statusText}: ${await response.text()}`);
     }
 

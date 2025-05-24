@@ -1,4 +1,8 @@
-import OauthFacade, { TokenResponse, NoAuthInProgressError, type TokenResponseJson } from './oauth-facade/index.js';
+import OauthFacade, {
+  TokenResponse,
+  NoAuthInProgressError,
+  type TokenResponseJson,
+} from './oauth-facade/index.js';
 
 export type Headers = Record<string, string>;
 
@@ -15,10 +19,7 @@ export default class OauthClient {
   constructor(
     authorizationServerBaseUrl: URL,
     protected readonly clientId: string,
-    {
-      scopes = [],
-      redirectUrl = OauthClient.cleanedCurrentUrl(),
-    }: OauthClientOptions = {},
+    { scopes = [], redirectUrl = OauthClient.cleanedCurrentUrl() }: OauthClientOptions = {},
   ) {
     if (!window.isSecureContext) {
       throw new Error('OAuth Client cannot operate within insecure contexts.');
@@ -131,13 +132,7 @@ export default class OauthClient {
 
     const url = new URL(currentUrl);
     // Possible parameters in an Authorization Response
-    const oauthParameters = [
-      'code',
-      'state',
-      'error',
-      'error_description',
-      'error_uri',
-    ];
+    const oauthParameters = ['code', 'state', 'error', 'error_description', 'error_uri'];
     for (const oauthParameter of oauthParameters) {
       url.searchParams.delete(oauthParameter);
     }

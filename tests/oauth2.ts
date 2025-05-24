@@ -16,10 +16,7 @@ export const registeredClients: Client[] = [
     grants: ['authorization_code', 'refresh_token'],
   },
 ];
-export const registeredScopes = [
-  'read',
-  'write',
-];
+export const registeredScopes = ['read', 'write'];
 
 export const model: OAuth2Server.AuthorizationCodeModel | OAuth2Server.RefreshTokenModel = {
   async getClient(clientId) {
@@ -30,7 +27,7 @@ export const model: OAuth2Server.AuthorizationCodeModel | OAuth2Server.RefreshTo
     }
     return false;
   },
-  async validateScope(user, client, scope) {
+  async validateScope(_user, _client, scope) {
     // Interpret undefined as empty set of scopes, but don't return undefined,
     // as it is considered falsy and will fail validation
     const requestedScopes = scope ?? [];
@@ -52,9 +49,7 @@ export const model: OAuth2Server.AuthorizationCodeModel | OAuth2Server.RefreshTo
   async saveToken(token, client, user) {
     // Structurally, "token" should already contain "client" and "user", but due to a likely bug,
     // it doesn't
-    // eslint-disable-next-line no-param-reassign
     token.client = client;
-    // eslint-disable-next-line no-param-reassign
     token.user = user;
 
     accessTokenDb.set(token.accessToken, token);

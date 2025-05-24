@@ -1,7 +1,7 @@
-import { vi, describe, expect, test, beforeAll, beforeEach, onTestFinished } from 'vitest';
-import { buildClient } from './setup-client.js';
-import { model as oauth2Model } from './oauth2.js';
+import { beforeAll, beforeEach, describe, expect, onTestFinished, test, vi } from 'vitest';
 import { AuthorizationFailureError, TokenFailureError } from '../src/index.js';
+import { model as oauth2Model } from './oauth2.js';
+import { buildClient } from './setup-client.js';
 
 beforeAll(() => {
   // This can be useful for debugging, but it clobbers test progress,
@@ -75,6 +75,7 @@ describe('not logged in', () => {
     const resp = await fetch(redirectUrl, { method: 'GET', redirect: 'manual' });
 
     expect(resp.status).toEqual(302);
+    // biome-ignore lint/style/noNonNullAssertion: an error from assigning null is fine in a test
     window.location.assign(resp.headers.get('Location')!);
     // Re-create the client, as this would happen after the redirect
     client = buildClient();
@@ -97,6 +98,7 @@ describe('failed login', () => {
     await vi.waitUntil(() => window.location.href.startsWith('https://api.example.com'));
 
     const resp = await fetch(window.location.href, { method: 'GET', redirect: 'manual' });
+    // biome-ignore lint/style/noNonNullAssertion: an error from assigning null is fine in a test
     window.location.assign(resp.headers.get('Location')!);
     client = buildClient(['invalid-scope']);
 
@@ -114,6 +116,7 @@ describe('failed login', () => {
     await client.redirectToLogin();
     await vi.waitUntil(() => window.location.href.startsWith('https://api.example.com'));
     const resp = await fetch(window.location.href, { method: 'GET', redirect: 'manual' });
+    // biome-ignore lint/style/noNonNullAssertion: an error from assigning null is fine in a test
     window.location.assign(resp.headers.get('Location')!);
     client = buildClient();
 
@@ -131,6 +134,7 @@ describe('already logged in', () => {
     await context.client.redirectToLogin();
     await vi.waitUntil(() => window.location.href.startsWith('https://api.example.com'));
     const resp = await fetch(window.location.href, { method: 'GET', redirect: 'manual' });
+    // biome-ignore lint/style/noNonNullAssertion: an error from assigning null is fine in a test
     window.location.assign(resp.headers.get('Location')!);
     context.client = buildClient();
     await context.client.maybeRestoreLogin();

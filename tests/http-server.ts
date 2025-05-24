@@ -93,7 +93,7 @@ export default setupServer(
   }),
 
   http.post('https://api.example.com/revoke_token/', async ({ request }) => {
-    const oauthRequest = await mswRequestToOauth(request);
+    const _oauthRequest = await mswRequestToOauth(request);
     const oauthResponse = new OAuth2Server.Response({
       // RFC 7009 states that this has no body ann some servers send a non-JSON content type.
       headers: {

@@ -1,5 +1,6 @@
 import {
   type AuthorizationRequest,
+  type AuthorizationRequestResponse,
   type AuthorizationResponse,
   RedirectRequestHandler,
 } from '@openid/appauth';
@@ -19,7 +20,7 @@ export default class ResolvingRedirectRequestHandler extends RedirectRequestHand
    * via a Promise instead of a callback and provides additional error handling.
    */
   public async resolveAuthorizationRequest(): Promise<SuccessfulAuthorizationRequestResponse> {
-    let authorizationRequestResponse;
+    let authorizationRequestResponse: AuthorizationRequestResponse | null;
     try {
       authorizationRequestResponse = await this.completeAuthorizationRequest();
       if (!authorizationRequestResponse) {

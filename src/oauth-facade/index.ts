@@ -110,7 +110,7 @@ export default class OauthFacade {
       grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
       code: authRequestResponse.response.code,
       extras: {
-        // "code_verifier" should always be specified
+        // biome-ignore lint/style/noNonNullAssertion: "code_verifier" should always be specified
         code_verifier: authRequestResponse.request.internal!.code_verifier,
       },
     });

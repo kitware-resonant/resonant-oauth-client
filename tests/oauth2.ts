@@ -27,7 +27,7 @@ export const model: OAuth2Server.AuthorizationCodeModel | OAuth2Server.RefreshTo
     }
     return false;
   },
-  async validateScope(user, client, scope) {
+  async validateScope(_user, _client, scope) {
     // Interpret undefined as empty set of scopes, but don't return undefined,
     // as it is considered falsy and will fail validation
     const requestedScopes = scope ?? [];

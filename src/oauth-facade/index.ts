@@ -1,22 +1,22 @@
 import {
+  AppAuthError,
   AuthorizationRequest,
   AuthorizationServiceConfiguration,
   BaseTokenRequestHandler,
-  setFlag,
   GRANT_TYPE_AUTHORIZATION_CODE,
   GRANT_TYPE_REFRESH_TOKEN,
   LocalStorageBackend,
   RevokeTokenRequest,
+  TokenError,
   TokenRequest,
   type TokenRequestHandler,
   type TokenResponse,
-  AppAuthError,
-  TokenError,
+  setFlag,
 } from '@openid/appauth';
-import NoHashQueryStringUtils from './no-hash-query-string-utils.js';
-import ResolvingRedirectRequestHandler from './resolving-redirect-request-handler.js';
 import { ServerError, TokenFailureError } from './error.js';
+import NoHashQueryStringUtils from './no-hash-query-string-utils.js';
 import OauthFetchRequestor from './oauth-fetch-requestor.js';
+import ResolvingRedirectRequestHandler from './resolving-redirect-request-handler.js';
 
 export { TokenResponse, type TokenResponseJson } from '@openid/appauth';
 export * from './error.js';

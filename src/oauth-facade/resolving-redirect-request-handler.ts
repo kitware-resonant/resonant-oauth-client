@@ -76,8 +76,7 @@ export default class ResolvingRedirectRequestHandler extends RedirectRequestHand
       'appauth_current_authorization_request',
       // We want to clean up entries that may have been left behind by potentially multiple
       // previous failed attempts, so we go nuclear and destroy any appauth_authorization items.
-      ...Object.keys(localStorage)
-        .filter((key) => key.includes('appauth_authorization')),
+      ...Object.keys(localStorage).filter((key) => key.includes('appauth_authorization')),
     ];
     for (const key of oldKeys) {
       localStorage.removeItem(key);

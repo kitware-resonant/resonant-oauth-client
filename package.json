@@ -12,10 +12,7 @@
   "module": "./dist/index.js",
   "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": [
-    "/src/",
-    "/dist/"
-  ],
+  "files": ["/src/", "/dist/"],
   "scripts": {
     "test:lint": "biome check",
     "test:type": "tsc --project ./tests",

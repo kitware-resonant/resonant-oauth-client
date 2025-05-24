@@ -1,10 +1,18 @@
-import { http, HttpResponse, StrictRequest, DefaultBodyType, JsonBodyType } from 'msw';
-import { setupServer } from 'msw/node';
 import OAuth2Server from '@node-oauth/oauth2-server';
+import {
+  http,
+  type DefaultBodyType,
+  HttpResponse,
+  type JsonBodyType,
+  type StrictRequest,
+} from 'msw';
+import { setupServer } from 'msw/node';
 
 import oauth from './oauth2.js';
 
-async function mswRequestToOauth(request: StrictRequest<DefaultBodyType>): Promise<OAuth2Server.Request> {
+async function mswRequestToOauth(
+  request: StrictRequest<DefaultBodyType>,
+): Promise<OAuth2Server.Request> {
   // happy-dom has weird behavior whereby if a Request was created from a string, it will
   // have an internal Content-Type of "text/plain" and fail to support "request.formData", even
   // if the "Content-Type" header was set to "application/x-www-form-urlencoded". So, extract
@@ -41,19 +49,15 @@ export default setupServer(
     const oauthRequest = await mswRequestToOauth(request);
     const oauthResponse = new OAuth2Server.Response();
     try {
-      await oauth.authorize(
-        oauthRequest,
-        oauthResponse,
-        {
-          authenticateHandler: {
-            handle() {
-              // Always assume the user is logged in with the authorization server.
-              // Return a trivial user object.
-              return {};
-            },
+      await oauth.authorize(oauthRequest, oauthResponse, {
+        authenticateHandler: {
+          handle() {
+            // Always assume the user is logged in with the authorization server.
+            // Return a trivial user object.
+            return {};
           },
         },
-      );
+      });
     } catch (error) {
       // Failed attempts will throw errors, but oauthResponse should be updated with the error code,
       // with is a redirect for authorization
@@ -74,10 +78,7 @@ export default setupServer(
     const oauthRequest = await mswRequestToOauth(request);
     const oauthResponse = new OAuth2Server.Response();
     try {
-      await oauth.token(
-        oauthRequest,
-        oauthResponse,
-      );
+      await oauth.token(oauthRequest, oauthResponse);
     } catch (error) {
       // Failed attempts will throw errors, but oauthResponse should be updated with the error code,
       // which is 400 for tokens

@@ -1,5 +1,5 @@
-import { vi, beforeEach, afterEach } from 'vitest';
-import { Window as HappyDomWindow } from 'happy-dom';
+import type { Window as HappyDomWindow } from 'happy-dom';
+import { afterEach, beforeEach, vi } from 'vitest';
 
 import OAuthClient from '../src/index.js';
 
@@ -12,7 +12,7 @@ declare global {
 // Add additional properties to Vitest context
 declare module 'vitest' {
   interface TestContext {
-    client: OAuthClient
+    client: OAuthClient;
   }
 }
 

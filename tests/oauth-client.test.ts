@@ -1,7 +1,7 @@
-import { vi, describe, expect, test, beforeAll, beforeEach, onTestFinished } from 'vitest';
-import { buildClient } from './setup-client.js';
-import { model as oauth2Model } from './oauth2.js';
+import { beforeAll, beforeEach, describe, expect, onTestFinished, test, vi } from 'vitest';
 import { AuthorizationFailureError, TokenFailureError } from '../src/index.js';
+import { model as oauth2Model } from './oauth2.js';
+import { buildClient } from './setup-client.js';
 
 beforeAll(() => {
   // This can be useful for debugging, but it clobbers test progress,

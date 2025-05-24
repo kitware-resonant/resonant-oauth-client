@@ -1,4 +1,4 @@
-import { FetchRequestor, AppAuthError } from '@openid/appauth';
+import { AppAuthError, FetchRequestor } from '@openid/appauth';
 
 // Unlike the upstream FetchRequestor, this returns the full response body on 400 or 401 status,
 // which is how RFC 6749 5.2 requires Access Token Error Responses to be sent.

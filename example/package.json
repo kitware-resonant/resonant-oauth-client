@@ -12,10 +12,7 @@
   "devDependencies": {
     "parcel": "^2.14.4"
   },
-  "browserslist": [
-    "last 1 chrome version",
-    "last 1 firefox version"
-  ],
+  "browserslist": ["last 1 chrome version", "last 1 firefox version"],
   "@parcel/resolver-default": {
     "packageExports": true
   }

@@ -16,10 +16,7 @@ export const registeredClients: Client[] = [
     grants: ['authorization_code', 'refresh_token'],
   },
 ];
-export const registeredScopes = [
-  'read',
-  'write',
-];
+export const registeredScopes = ['read', 'write'];
 
 export const model: OAuth2Server.AuthorizationCodeModel | OAuth2Server.RefreshTokenModel = {
   async getClient(clientId) {

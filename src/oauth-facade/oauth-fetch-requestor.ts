@@ -29,16 +29,13 @@ export default class OauthFetchRequestor extends FetchRequestor {
     return formData;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public async xhr<T>(settings: JQuery.AjaxSettings): Promise<T> {
     if (!settings.url) {
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
       throw new AppAuthError('A URL must be provided.');
     }
     if (settings.method?.toUpperCase() !== 'POST') {
       // RFC 6749 3.2: The client MUST use the HTTP "POST" method when making access token
       // requests.
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
       throw new AppAuthError('Only POST is allowed for token requests.');
     }
 
@@ -48,7 +45,6 @@ export default class OauthFetchRequestor extends FetchRequestor {
       body: OauthFetchRequestor.toFormData(settings),
     });
     if (response.status >= 500) {
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
       throw new AppAuthError(`${response.statusText}: ${await response.text()}`);
     }
 

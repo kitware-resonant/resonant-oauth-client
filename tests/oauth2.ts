@@ -49,9 +49,7 @@ export const model: OAuth2Server.AuthorizationCodeModel | OAuth2Server.RefreshTo
   async saveToken(token, client, user) {
     // Structurally, "token" should already contain "client" and "user", but due to a likely bug,
     // it doesn't
-    // eslint-disable-next-line no-param-reassign
     token.client = client;
-    // eslint-disable-next-line no-param-reassign
     token.user = user;
 
     accessTokenDb.set(token.accessToken, token);

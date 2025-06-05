@@ -63,15 +63,15 @@ export default class OauthFacade {
   }
 
   protected get authorizationEndpoint(): URL {
-    return new URL('authorize/', this.authorizationServerBaseUrl);
+    return new URL('identity/o/authorize', this.authorizationServerBaseUrl);
   }
 
   protected get tokenEndpoint(): URL {
-    return new URL('token/', this.authorizationServerBaseUrl);
+    return new URL('identity/o/api/token', this.authorizationServerBaseUrl);
   }
 
   protected get revocationEndpoint(): URL {
-    return new URL('revoke_token/', this.authorizationServerBaseUrl);
+    return new URL('identity/o/api/revoke', this.authorizationServerBaseUrl);
   }
 
   /**

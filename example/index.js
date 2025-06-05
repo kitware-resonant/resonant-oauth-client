@@ -3,6 +3,7 @@ import OauthClient from '@resonant/oauth-client';
 const oauthClient = new OauthClient(
   new URL('http://localhost:8000/oauth/'),
   'Qir0Aq7AKIsAkMDLQe9MEfORbHEBKsViNhAKJf1A',
+  { scopes: ['openid'] },
 );
 
 function updateDom() {

@@ -29,7 +29,7 @@
     "@openid/appauth": "^1.3.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.0.5",
     "@node-oauth/oauth2-server": "^5.2.0",
     "@tsconfig/recommended": "^1.0.8",
     "@types/jquery": "^3.5.32",

@@ -1,44 +1,39 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true
   },
   "formatter": {
-    "useEditorconfig": true
+    "useEditorconfig": true,
+    "lineWidth": 100
   },
   "linter": {
+    "domains": {
+      "project": "all",
+      "test": "all"
+    },
     "rules": {
-      "all": true,
       "correctness": {
         "useImportExtensions": {
-          "level": "warn",
+          "level": "on",
           "options": {
-            "suggestedExtensions": {
-              "ts": {
-                "module": "js",
-                "component": "jsx"
-              }
-            }
+            "forceJsExtensions": true
           }
         }
       },
-      "performance": {
-        "noBarrelFile": "off",
-        "noReExportAll": "off"
-      },
-      "suspicious": {
-        // useAwait incorrectly flags cases when a promise is returned
-        // https://github.com/biomejs/biome/issues/1161
-        "useAwait": "off"
+      "nursery": {
+        "noUnresolvedImports": "off"
       },
       "style": {
-        "noDefaultExport": "off",
-        // noDoneCallback flags on Vite context
-        "noDoneCallback": "off",
-        "noParameterProperties": "off",
-        "useNamingConvention": "off"
+        "noInferrableTypes": "on",
+        "noParameterAssign": "on",
+        "noUnusedTemplateLiteral": "on",
+        "useAsConstAssertion": "on",
+        "useDefaultParameterLast": "on",
+        "useNumberNamespace": "on",
+        "useSingleVarDeclarator": "on"
       }
     }
   },
@@ -46,18 +41,5 @@
     "formatter": {
       "quoteStyle": "single"
     }
-  },
-  "overrides": [
-    {
-      "include": ["tests/**"],
-      "linter": {
-        "rules": {
-          "performance": {
-            // useTopLevelRegex is unreasonable for test cases
-            "useTopLevelRegex": "off"
-          }
-        }
-      }
-    }
-  ]
+  }
 }

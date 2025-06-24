@@ -7,11 +7,11 @@ import {
   GRANT_TYPE_REFRESH_TOKEN,
   LocalStorageBackend,
   RevokeTokenRequest,
+  setFlag,
   TokenError,
   TokenRequest,
   type TokenRequestHandler,
   type TokenResponse,
-  setFlag,
 } from '@openid/appauth';
 import { ServerError, TokenFailureError } from './error.js';
 import NoHashQueryStringUtils from './no-hash-query-string-utils.js';

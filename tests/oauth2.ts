@@ -1,8 +1,8 @@
 import OAuth2Server, {
   type AuthorizationCode,
   type Client,
-  type Token,
   type RefreshToken,
+  type Token,
 } from '@node-oauth/oauth2-server';
 
 const authCodeDb = new Map<string, AuthorizationCode>();

@@ -1,8 +1,8 @@
 import OAuth2Server from '@node-oauth/oauth2-server';
 import {
-  http,
   type DefaultBodyType,
   HttpResponse,
+  http,
   type JsonBodyType,
   type StrictRequest,
 } from 'msw';

@@ -1,6 +1,6 @@
 import OauthFacade, {
-  TokenResponse,
   NoAuthInProgressError,
+  TokenResponse,
   type TokenResponseJson,
 } from './oauth-facade/index.js';
 

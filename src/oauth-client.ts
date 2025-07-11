@@ -1,3 +1,4 @@
+import type { AuthorizationServiceConfigurationJson } from '@openid/appauth';
 import OauthFacade, {
   NoAuthInProgressError,
   TokenResponse,
@@ -6,39 +7,58 @@ import OauthFacade, {
 
 export type Headers = Record<string, string>;
 
-export type OauthClientOptions = {
-  scopes: string[];
-  redirectUrl?: URL;
-};
-
 export default class OauthClient {
   protected token: TokenResponse | null = null;
 
   protected readonly oauthFacade: OauthFacade;
 
   constructor(
-    authorizationServerBaseUrl: URL,
+    protected readonly authorizationEndpoint: URL,
+    protected readonly tokenEndpoint: URL,
+    protected readonly revocationEndpoint: URL,
     protected readonly clientId: string,
-    { scopes, redirectUrl = OauthClient.cleanedCurrentUrl() }: OauthClientOptions,
+    protected readonly scopes: string[],
+    protected readonly redirectUrl: URL = OauthClient.cleanedCurrentUrl(),
   ) {
     if (!window.isSecureContext) {
       throw new Error('OAuth Client cannot operate within insecure contexts.');
     }
-
-    const cleanedAuthorizationServerBaseUrl = new URL(authorizationServerBaseUrl);
-    // A URL base cannot have query string or fragment components
-    cleanedAuthorizationServerBaseUrl.search = '';
-    cleanedAuthorizationServerBaseUrl.hash = '';
 
     // RFC6749 3.1.2 requires that the Redirection URI must not include a fragment component
     const cleanedRedirectUrl = new URL(redirectUrl);
     cleanedRedirectUrl.hash = '';
 
     this.oauthFacade = new OauthFacade(
-      cleanedAuthorizationServerBaseUrl,
+      this.authorizationEndpoint,
+      this.tokenEndpoint,
+      this.revocationEndpoint,
       cleanedRedirectUrl,
       this.clientId,
+      this.scopes,
+    );
+  }
+
+  public static async fromWellKnownUrl(
+    authorizationServerBaseUrl: URL, // TODO: maybe require the entire well-known URL
+    clientId: string,
+    scopes: string[],
+    redirectUrl: URL = OauthClient.cleanedCurrentUrl(),
+  ): Promise<OauthClient> {
+    const wellKnownConfigUrl = new URL(
+      '.well-known/openid-configuration',
+      authorizationServerBaseUrl.href,
+    );
+
+    const response = await fetch(wellKnownConfigUrl);
+    const urls: AuthorizationServiceConfigurationJson = await response.json();
+
+    return new OauthClient(
+      new URL(urls.authorization_endpoint, authorizationServerBaseUrl),
+      new URL(urls.token_endpoint, authorizationServerBaseUrl),
+      new URL(urls.revocation_endpoint, authorizationServerBaseUrl),
+      clientId,
       scopes,
+      redirectUrl,
     );
   }
 

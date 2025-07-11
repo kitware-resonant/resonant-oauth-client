@@ -17,7 +17,13 @@ declare module 'vitest' {
 }
 
 export function buildClient(scopes: string[] = []): OAuthClient {
-  return new OAuthClient(new URL('https://api.example.com'), 'resonant-client-id', { scopes });
+  return new OAuthClient(
+    new URL('https://api.example.com/authorize/'),
+    new URL('https://api.example.com/token/'),
+    new URL('https://api.example.com/revoke_token/'),
+    'resonant-client-id',
+    scopes,
+  );
 }
 
 beforeEach((context) => {

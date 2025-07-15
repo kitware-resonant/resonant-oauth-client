@@ -7,7 +7,7 @@ import OauthFacade, {
 export type Headers = Record<string, string>;
 
 export type OauthClientOptions = {
-  scopes?: string[];
+  scopes: string[];
   redirectUrl?: URL;
 };
 
@@ -19,7 +19,7 @@ export default class OauthClient {
   constructor(
     authorizationServerBaseUrl: URL,
     protected readonly clientId: string,
-    { scopes = [], redirectUrl = OauthClient.cleanedCurrentUrl() }: OauthClientOptions = {},
+    { scopes, redirectUrl = OauthClient.cleanedCurrentUrl() }: OauthClientOptions,
   ) {
     if (!window.isSecureContext) {
       throw new Error('OAuth Client cannot operate within insecure contexts.');

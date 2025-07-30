@@ -45,6 +45,22 @@ function oauthResponseToMsw(oauthResponse: OAuth2Server.Response): HttpResponse<
 export default setupServer(
   // Define a route for the test URL, so navigations to load it don't trigger unknown route errors
   http.get('http://www.example.com/', () => new HttpResponse()),
+
+  http.get('https://api.example.com/.well-known/openid-configuration', () => {
+    return HttpResponse.json({
+      authorization_endpoint: 'https://api.example.com/authorize/',
+      device_authorization_endpoint: 'https://api.example.com/oauth/identity/o/api/device/code',
+      revocation_endpoint: 'https://api.example.com/revoke_token/',
+      token_endpoint: 'https://api.example.com/token/',
+      userinfo_endpoint: 'https://api.example.com/oauth/identity/o/api/userinfo',
+      jwks_uri: 'https://api.example.com/oauth/.well-known/jwks.json',
+      issuer: 'https://api.example.com',
+      response_types_supported: ['code'],
+      subject_types_supported: ['public'],
+      id_token_signing_alg_values_supported: ['RS256'],
+    });
+  }),
+
   http.get('https://api.example.com/authorize/', async ({ request }) => {
     const oauthRequest = await mswRequestToOauth(request);
     const oauthResponse = new OAuth2Server.Response();

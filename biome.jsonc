@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -33,7 +33,10 @@
         "useAsConstAssertion": "on",
         "useDefaultParameterLast": "on",
         "useNumberNamespace": "on",
-        "useSingleVarDeclarator": "on"
+        "useSingleVarDeclarator": "on",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "noUselessElse": "error"
       }
     }
   },

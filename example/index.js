@@ -1,9 +1,9 @@
 import OauthClient from '@resonant/oauth-client';
 
-const oauthClient = new OauthClient(
-  new URL('http://localhost:8000/oauth/'),
-  'Qir0Aq7AKIsAkMDLQe9MEfORbHEBKsViNhAKJf1A',
-);
+// Will be initialized asynchronously in the DOMContentLoaded event
+// TODO: should we have a seperate example app for initializing using
+// well-known URL?
+let oauthClient;
 
 function updateDom() {
   document.querySelector('#sign-in-link').style.visibility = oauthClient.isLoggedIn
@@ -28,6 +28,11 @@ document.querySelector('#sign-out-link').addEventListener('click', async (event)
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
+  oauthClient = await OauthClient.fromWellKnownUrl(
+    new URL('http://localhost:8000/oauth/'),
+    'Qir0Aq7AKIsAkMDLQe9MEfORbHEBKsViNhAKJf1A',
+    ['openid'],
+  );
   updateDom();
   await oauthClient.maybeRestoreLogin();
   updateDom();

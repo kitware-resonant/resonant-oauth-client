@@ -44,13 +44,17 @@ export default class OauthFacade {
   /**
    * Create an OauthFacade.
    *
-   * @param authorizationServerBaseUrl The common base URL for Authorization Server endpoints.
+   * @param authorizationEndpoint The URL of the Authorization Server's authorization endpoint.
+   * @param tokenEndpoint The URL of the Authorization Server's token endpoint.
+   * @param revocationEndpoint The URL of the Authorization Server's token revocation endpoint.
    * @param redirectUrl The URL of the current page, to be redirected back to after authorization.
    * @param clientId The Client ID for this application.
    * @param scopes An array of scopes to request access to.
    */
   constructor(
-    protected readonly authorizationServerBaseUrl: URL,
+    protected readonly authorizationEndpoint: URL,
+    protected readonly tokenEndpoint: URL,
+    protected readonly revocationEndpoint: URL,
     protected readonly redirectUrl: URL,
     protected readonly clientId: string,
     protected readonly scopes: string[],
@@ -60,18 +64,6 @@ export default class OauthFacade {
       token_endpoint: this.tokenEndpoint.toString(),
       revocation_endpoint: this.revocationEndpoint.toString(),
     });
-  }
-
-  protected get authorizationEndpoint(): URL {
-    return new URL('authorize/', this.authorizationServerBaseUrl);
-  }
-
-  protected get tokenEndpoint(): URL {
-    return new URL('token/', this.authorizationServerBaseUrl);
-  }
-
-  protected get revocationEndpoint(): URL {
-    return new URL('revoke_token/', this.authorizationServerBaseUrl);
   }
 
   /**

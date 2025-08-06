@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, describe, expect, onTestFinished, test, vi } from 'vitest';
-import { AuthorizationFailureError, TokenFailureError } from '../src/index.js';
+import OAuthClient, { AuthorizationFailureError, TokenFailureError } from '../src/index.js';
 import { model as oauth2Model } from './oauth2.js';
 import { buildClient } from './setup-client.js';
 
@@ -79,6 +79,47 @@ describe('not logged in', () => {
     window.location.assign(resp.headers.get('Location')!);
     // Re-create the client, as this would happen after the redirect
     client = buildClient();
+
+    // Test token exchange after inbound redirect
+    await client.maybeRestoreLogin();
+
+    expect(client.isLoggedIn).toEqual(true);
+    expect(client.authHeaders).toHaveProperty('Authorization');
+  });
+
+  test('full login flow using well-known URL', async () => {
+    let client = await OAuthClient.fromWellKnownUrl(
+      new URL('https://api.example.com'),
+      'resonant-client-id',
+      ['read', 'write'],
+    );
+
+    // Test outbound redirect to authorization
+    await client.redirectToLogin();
+    await vi.waitUntil(() => new URL(window.location.href).hostname === 'api.example.com');
+
+    expect(window.localStorage.length).toEqual(3);
+    expect(window.localStorage.getItem('appauth_current_authorization_request')).not.toBeNull();
+    const redirectUrl = new URL(window.location.href);
+    expect(redirectUrl.hostname).toEqual('api.example.com');
+    expect(redirectUrl.pathname).toEqual('/authorize/');
+    expect(redirectUrl.searchParams.has('client_id')).toEqual(true);
+    expect(redirectUrl.searchParams.has('code_challenge')).toEqual(true);
+    expect(redirectUrl.searchParams.get('code_challenge_method')).toEqual('S256');
+
+    // Execute inbound redirect from authorization
+    const resp = await fetch(redirectUrl, { method: 'GET', redirect: 'manual' });
+
+    expect(resp.status).toEqual(302);
+    // biome-ignore lint/style/noNonNullAssertion: an error from assigning null is fine in a test
+    window.location.assign(resp.headers.get('Location')!);
+
+    // Re-create the client, as this would happen after the redirect
+    client = await OAuthClient.fromWellKnownUrl(
+      new URL('https://api.example.com'),
+      'resonant-client-id',
+      ['read', 'write'],
+    );
 
     // Test token exchange after inbound redirect
     await client.maybeRestoreLogin();

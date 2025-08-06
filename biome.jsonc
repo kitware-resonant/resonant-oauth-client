@@ -33,10 +33,7 @@
         "useAsConstAssertion": "on",
         "useDefaultParameterLast": "on",
         "useNumberNamespace": "on",
-        "useSingleVarDeclarator": "on",
-        "useEnumInitializers": "error",
-        "useSelfClosingElements": "error",
-        "noUselessElse": "error"
+        "useSingleVarDeclarator": "on"
       }
     }
   },

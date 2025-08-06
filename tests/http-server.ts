@@ -24,7 +24,7 @@ async function mswRequestToOauth(
     ...Object.fromEntries(request.headers),
     // TODO: Either happy-dom or jQuery is failing to add Content-Length headers, so the internals
     // of "@node-oauth/oauth2-server" are refusing to allow POST bodies
-    'Content-Length': bodyText.length,
+    'Content-Length': bodyText.length.toString(),
   };
 
   return new OAuth2Server.Request({

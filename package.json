@@ -17,11 +17,11 @@
     "/dist/"
   ],
   "scripts": {
-    "test:lint": "biome check",
+    "test:lint": "biome check --error-on-warnings",
     "test:type": "tsc --project ./tests",
     "test:unit": "vitest --watch=false",
     "test": "npm-run-all test:*",
-    "format": "biome check --write",
+    "format": "biome check --write --error-on-warnings",
     "watch": "tsc --watch",
     "build:clean": "rimraf ./dist",
     "build:compile": "tsc",

@@ -1,9 +1,9 @@
-import { beforeAll, beforeEach, describe, expect, onTestFinished, test, vi } from 'vitest';
+import { describe, expect, onTestFinished, vi } from 'vitest';
 import { AuthorizationFailureError, TokenFailureError } from '../src/index.js';
 import { model as oauth2Model } from './oauth2.js';
-import { buildClient } from './setup-client.js';
+import { buildClient, test } from './setup-client.js';
 
-beforeAll(() => {
+test.beforeAll(() => {
   // This can be useful for debugging, but it clobbers test progress,
   // so leave it off except for local use
   // import { setFlag } from '@openid/appauth';
@@ -130,14 +130,13 @@ describe('failed login', () => {
 });
 
 describe('already logged in', () => {
-  beforeEach(async (context) => {
-    await context.client.redirectToLogin();
+  test.beforeEach(async ({ client }) => {
+    await client.redirectToLogin();
     await vi.waitUntil(() => new URL(window.location.href).hostname === 'api.example.com');
     const resp = await fetch(window.location.href, { method: 'GET', redirect: 'manual' });
     // biome-ignore lint/style/noNonNullAssertion: an error from assigning null is fine in a test
     window.location.assign(resp.headers.get('Location')!);
-    context.client = buildClient();
-    await context.client.maybeRestoreLogin();
+    await client.maybeRestoreLogin();
   });
 
   test('initial state', async ({ client }) => {

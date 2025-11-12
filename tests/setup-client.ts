@@ -1,5 +1,5 @@
 import type { Window as HappyDomWindow } from 'happy-dom';
-import { afterEach, beforeEach, vi } from 'vitest';
+import { test as baseTest, vi } from 'vitest';
 
 import OAuthClient from '../src/index.js';
 
@@ -9,22 +9,21 @@ declare global {
   interface Window extends HappyDomWindow {}
 }
 
-// Add additional properties to Vitest context
-declare module 'vitest' {
-  interface TestContext {
-    client: OAuthClient;
-  }
-}
-
 export function buildClient(scopes: string[] = []): OAuthClient {
   return new OAuthClient(new URL('https://api.example.com'), 'resonant-client-id', { scopes });
 }
 
-beforeEach((context) => {
-  context.client = buildClient();
+export const test = baseTest.extend<{
+  client: OAuthClient;
+}>({
+  // biome-ignore lint/correctness/noEmptyPattern: Vitest syntax requirement
+  client: async ({}, use) => {
+    const client = buildClient();
+    use(client);
+  },
 });
 
-afterEach(async () => {
+test.afterEach(async () => {
   // DOM must be manually reset between tests: https://github.com/vitest-dev/vitest/issues/682
   window.localStorage.clear();
   window.location.replace('http://www.example.com');

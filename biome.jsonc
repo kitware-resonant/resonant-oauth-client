@@ -1,45 +1,4 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
-  "vcs": {
-    "enabled": true,
-    "clientKind": "git",
-    "useIgnoreFile": true
-  },
-  "formatter": {
-    "useEditorconfig": true,
-    "lineWidth": 100
-  },
-  "linter": {
-    "domains": {
-      "project": "all",
-      "test": "all"
-    },
-    "rules": {
-      "correctness": {
-        "useImportExtensions": {
-          "level": "on",
-          "options": {
-            "forceJsExtensions": true
-          }
-        }
-      },
-      "nursery": {
-        "noUnresolvedImports": "off"
-      },
-      "style": {
-        "noInferrableTypes": "on",
-        "noParameterAssign": "on",
-        "noUnusedTemplateLiteral": "on",
-        "useAsConstAssertion": "on",
-        "useDefaultParameterLast": "on",
-        "useNumberNamespace": "on",
-        "useSingleVarDeclarator": "on"
-      }
-    }
-  },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "single"
-    }
-  }
+  "$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
+  "extends": ["@resonant/biome-config"]
 }

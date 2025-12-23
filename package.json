@@ -32,8 +32,9 @@
     "@openid/appauth": "^1.3.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.5",
+    "@biomejs/biome": "^2.3.10",
     "@node-oauth/oauth2-server": "^5.2.0",
+    "@resonant/biome-config": "^0.1.2",
     "@tsconfig/recommended": "^1.0.8",
     "@types/jquery": "^3.5.32",
     "@vitest/coverage-v8": "4.0.14",

@@ -29,7 +29,7 @@ export default class OauthFetchRequestor extends FetchRequestor {
     return formData;
   }
 
-  public async xhr<T>(settings: JQuery.AjaxSettings): Promise<T> {
+  public override async xhr<T>(settings: JQuery.AjaxSettings): Promise<T> {
     if (!settings.url) {
       throw new AppAuthError('A URL must be provided.');
     }

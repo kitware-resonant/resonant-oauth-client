@@ -139,7 +139,7 @@ describe('already logged in', () => {
     await client.maybeRestoreLogin();
   });
 
-  test('initial state', async ({ client }) => {
+  test('initial state', ({ client }) => {
     expect(client.isLoggedIn).toEqual(true);
     expect(client.authHeaders).toHaveProperty('Authorization');
   });

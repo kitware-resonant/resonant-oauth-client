@@ -56,9 +56,11 @@ export default class OauthFacade {
     protected readonly scopes: string[],
   ) {
     this.config = new AuthorizationServiceConfiguration({
+      // biome-ignore-start lint/style/useNamingConvention: library interface names
       authorization_endpoint: this.authorizationEndpoint.toString(),
       token_endpoint: this.tokenEndpoint.toString(),
       revocation_endpoint: this.revocationEndpoint.toString(),
+      // biome-ignore-end lint/style/useNamingConvention: library interface names
     });
   }
 
@@ -81,6 +83,7 @@ export default class OauthFacade {
    */
   public async startLogin(): Promise<void> {
     const authRequest = new AuthorizationRequest({
+      // biome-ignore-start lint/style/useNamingConvention: library interface names
       client_id: this.clientId,
       redirect_uri: this.redirectUrl.toString(),
       scope: this.scopes.join(' '),
@@ -88,6 +91,7 @@ export default class OauthFacade {
       extras: {
         response_mode: 'query',
       },
+      // biome-ignore-end lint/style/useNamingConvention: library interface names
     });
     await authRequest.setupCodeVerifier();
     this.authHandler.performAuthorizationRequest(this.config, authRequest);
@@ -105,17 +109,20 @@ export default class OauthFacade {
 
     // Exchange for an access token and return tokenResponse
     const tokenRequest = new TokenRequest({
+      // biome-ignore-start lint/style/useNamingConvention: library interface names
       client_id: this.clientId,
       redirect_uri: this.redirectUrl.toString(),
       grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
       code: authRequestResponse.response.code,
       extras: {
-        // biome-ignore lint/style/noNonNullAssertion: "code_verifier" should always be specified
+        // biome-ignore lint/style/noNonNullAssertion: ".internal.code_verifier" is always set
         code_verifier: authRequestResponse.request.internal!.code_verifier,
       },
+      // biome-ignore-end lint/style/useNamingConvention: library interface names
     });
 
     try {
+      // await is necessary here, to ensure errors are caught before returning
       return await this.tokenHandler.performTokenRequest(this.config, tokenRequest);
     } catch (error) {
       // Based on the implementation of performTokenRequest, the error should at least be an
@@ -140,11 +147,13 @@ export default class OauthFacade {
 
   public async refresh(token: TokenResponse): Promise<TokenResponse> {
     const tokenRequest = new TokenRequest({
+      // biome-ignore-start lint/style/useNamingConvention: library interface names
       client_id: this.clientId,
       redirect_uri: this.redirectUrl.toString(),
       grant_type: GRANT_TYPE_REFRESH_TOKEN,
       refresh_token: token.refreshToken,
       // Don't specify a new scope, which will implicitly request the same scope as the old token
+      // biome-ignore-end lint/style/useNamingConvention: library interface names
     });
     // Return the new token
     return this.tokenHandler.performTokenRequest(this.config, tokenRequest);
@@ -158,9 +167,11 @@ export default class OauthFacade {
    */
   public async logout(token: TokenResponse): Promise<void> {
     const revokeTokenRequest = new RevokeTokenRequest({
+      // biome-ignore-start lint/style/useNamingConvention: library interface names
       token: token.accessToken,
       token_type_hint: 'access_token',
       client_id: this.clientId,
+      // biome-ignore-end lint/style/useNamingConvention: library interface names
     });
     try {
       await this.tokenHandler.performRevokeTokenRequest(this.config, revokeTokenRequest);

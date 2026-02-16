@@ -21,6 +21,10 @@ jobs:
       - name: Ensure build succeeds
         run: |
           npm run build
+      - name: Report Biome output to GitHub
+        run: |
+          npx biome ci --reporter=github
+        continue-on-error: true
       - name: Run tests
         run: |
           npm run test

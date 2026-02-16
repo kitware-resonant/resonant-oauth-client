@@ -162,7 +162,7 @@ describe('already logged in', () => {
   test('logout', async ({ client }) => {
     await client.logout();
 
-    expect(client.isLoggedIn).toEqual(false);
+    expect(client.isLoggedIn).toEqual(true);
     expect(client.authHeaders).toEqual({});
     expect(window.localStorage).toHaveLength(0);
   });

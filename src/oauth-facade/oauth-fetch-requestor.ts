@@ -1,4 +1,5 @@
 import { AppAuthError, FetchRequestor } from '@openid/appauth';
+// biome-ignore lint/correctness/noUndeclaredDependencies: transitive via @openid/appauth
 import type JQuery from 'jquery';
 
 // Unlike the upstream FetchRequestor, this returns the full response body on 400 or 401 status,

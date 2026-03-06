@@ -17,7 +17,7 @@
     "/dist/"
   ],
   "scripts": {
-    "test:lint": "biome check --error-on-warnings",
+    "test:lint": "biome ci --error-on-warnings",
     "test:type": "tsc --project ./tests",
     "test:unit": "vitest --watch=false",
     "test": "npm-run-all test:*",

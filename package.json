@@ -19,7 +19,7 @@
   "scripts": {
     "test:lint": "biome ci --error-on-warnings",
     "test:type": "tsc --project ./tests",
-    "test:unit": "vitest --watch=false",
+    "test:unit": "vitest run",
     "test": "npm-run-all test:*",
     "format": "biome check --write --error-on-warnings",
     "watch": "tsc --watch",

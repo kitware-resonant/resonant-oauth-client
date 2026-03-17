@@ -92,23 +92,15 @@ export default setupServer(
     return oauthResponseToMsw(oauthResponse);
   }),
 
-  http.post('https://api.example.com/revoke_token/', async ({ request }) => {
-    const _oauthRequest = await mswRequestToOauth(request);
-    const oauthResponse = new OAuth2Server.Response({
-      // RFC 7009 states that this has no body ann some servers send a non-JSON content type.
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-      },
-      body: '',
-    });
-    // TODO: The test environment doesn't actually throw an error if `.json()` is called on this
-    // response, but a real browser does.
-
+  http.post('https://api.example.com/revoke_token/', async () => {
     // The oauth2-server library doesn't implement revoking an "access_token".
     // Revoking a "refresh_token" is implemented internally, but not via a distinctly callable
     // mechanism. See RFC7009 for more information about token revocation.
     // TODO: Revoke the access token manually.
 
-    return oauthResponseToMsw(oauthResponse);
+    // RFC 7009 states that this has no body and some servers send a non-JSON content type.
+    return new HttpResponse('', {
+      headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    });
   }),
 );

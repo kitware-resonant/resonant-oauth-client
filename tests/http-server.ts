@@ -13,17 +13,19 @@ import oauth from './oauth2.js';
 async function mswRequestToOauth(
   request: StrictRequest<DefaultBodyType>,
 ): Promise<OAuth2Server.Request> {
-  // happy-dom has weird behavior whereby if a Request was created from a string, it will
-  // have an internal Content-Type of "text/plain" and fail to support "request.formData", even
-  // if the "Content-Type" header was set to "application/x-www-form-urlencoded". So, extract
-  // the form data manually.
+  // TODO: happy-dom has weird behavior whereby if a Request was created from a string, it will
+  //  have an internal Content-Type of "text/plain" and fail to support "request.formData", even
+  //  if the "Content-Type" header was set to "application/x-www-form-urlencoded". So, extract
+  //  the form data manually;
+  //  See: https://github.com/capricorn86/happy-dom/issues/2106
   const bodyText = await request.text();
   const bodyFormData = Object.fromEntries(new URLSearchParams(bodyText));
 
   const headers = {
     ...Object.fromEntries(request.headers),
-    // TODO: Either happy-dom or jQuery is failing to add Content-Length headers, so the internals
-    // of "@node-oauth/oauth2-server" are refusing to allow POST bodies
+    // TODO: MSW is failing to add Content-Length headers, so the internals of
+    //  "@node-oauth/oauth2-server" are refusing to allow POST bodies;
+    //  See: https://github.com/mswjs/msw/issues/2674
     'Content-Length': bodyText.length.toString(),
   };
 

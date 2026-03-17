@@ -13,15 +13,7 @@ export function buildClient(scopes: string[] = []): OAuthClient {
   return new OAuthClient(new URL('https://api.example.com'), 'resonant-client-id', { scopes });
 }
 
-export const test = baseTest.extend<{
-  client: OAuthClient;
-}>({
-  // biome-ignore lint/correctness/noEmptyPattern: Vitest syntax requirement
-  client: async ({}, use) => {
-    const client = buildClient();
-    use(client);
-  },
-});
+export const test = baseTest.extend('client', () => buildClient());
 
 test.afterEach(() => {
   // DOM must be manually reset between tests: https://github.com/vitest-dev/vitest/issues/682

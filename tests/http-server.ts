@@ -13,24 +13,23 @@ import oauth from './oauth2.js';
 async function mswRequestToOauth(
   request: StrictRequest<DefaultBodyType>,
 ): Promise<OAuth2Server.Request> {
-  // TODO: happy-dom has weird behavior whereby if a Request was created from a string, it will
-  //  have an internal Content-Type of "text/plain" and fail to support "request.formData", even
-  //  if the "Content-Type" header was set to "application/x-www-form-urlencoded". So, extract
-  //  the form data manually;
-  //  See: https://github.com/capricorn86/happy-dom/issues/2106
-  const bodyText = await request.text();
-  const bodyFormData = Object.fromEntries(new URLSearchParams(bodyText));
-
   const headers = {
     ...Object.fromEntries(request.headers),
     // TODO: MSW is failing to add Content-Length headers, so the internals of
     //  "@node-oauth/oauth2-server" are refusing to allow POST bodies;
     //  See: https://github.com/mswjs/msw/issues/2674
-    'Content-Length': bodyText.length.toString(),
+    'Content-Length': (await request.clone().text()).length.toString(),
   };
 
+  // `OAuth2Server.Request` expects body as a decoded basic object and doesn't support an encoded
+  // string (from `request.text()`) or a `FormData` (from `request.formData()`).
+  const body =
+    request.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
+      ? Object.fromEntries(await request.formData())
+      : {};
+
   return new OAuth2Server.Request({
-    body: bodyFormData,
+    body,
     headers,
     method: request.method,
     query: Object.fromEntries(new URL(request.url).searchParams),

@@ -116,7 +116,7 @@ export default class OauthFacade {
       code: authRequestResponse.response.code,
       extras: {
         // biome-ignore lint/style/noNonNullAssertion: ".internal.code_verifier" is always set
-        code_verifier: authRequestResponse.request.internal!.code_verifier,
+        code_verifier: authRequestResponse.request.internal!.code_verifier!,
       },
       // biome-ignore-end lint/style/useNamingConvention: library interface names
     });

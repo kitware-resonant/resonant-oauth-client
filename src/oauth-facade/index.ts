@@ -116,7 +116,7 @@ export default class OauthFacade {
       code: authRequestResponse.response.code,
       extras: {
         // biome-ignore lint/style/noNonNullAssertion: ".internal.code_verifier" is always set
-        code_verifier: authRequestResponse.request.internal!.code_verifier,
+        code_verifier: authRequestResponse.request.internal!.code_verifier!,
       },
       // biome-ignore-end lint/style/useNamingConvention: library interface names
     });
@@ -134,10 +134,11 @@ export default class OauthFacade {
             error.extras.error,
             error.extras.errorDescription,
             error.extras.errorUri ? new URL(error.extras.errorUri) : undefined,
+            { cause: error },
           );
         }
         // The server or connection failed in some way
-        throw new ServerError(error.message);
+        throw new ServerError(error.message, { cause: error });
       }
       // This should never happen
       /* v8 ignore next 2 */
@@ -184,7 +185,7 @@ export default class OauthFacade {
       // AppAuthError, but this cannot be structurally guaranteed
       if (error instanceof AppAuthError) {
         // The server or connection failed in some way, only these are thrown.
-        throw new ServerError(error.message);
+        throw new ServerError(error.message, { cause: error });
       }
       // This should never happen
       /* v8 ignore next 2 */

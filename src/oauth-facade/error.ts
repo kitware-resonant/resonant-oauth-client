@@ -1,9 +1,4 @@
-export abstract class OAuthFacadeError extends Error {
-  constructor(message: string) {
-    super(message);
-    Object.setPrototypeOf(this, new.target.prototype);
-  }
-}
+export abstract class OAuthFacadeError extends Error {}
 
 export class NoAuthInProgressError extends OAuthFacadeError {
   constructor() {
@@ -12,8 +7,8 @@ export class NoAuthInProgressError extends OAuthFacadeError {
 }
 
 export class ServerError extends OAuthFacadeError {
-  constructor(message: string) {
-    super(`Server error: ${message}.`);
+  constructor(message: string, options?: ErrorOptions) {
+    super(`Server error: ${message}.`, options);
   }
 }
 
@@ -22,9 +17,10 @@ export abstract class OAuthFailureError extends OAuthFacadeError {
     public readonly errorCode: string,
     public readonly errorDescription: string | null = null,
     public readonly errorUri: URL | null = null,
+    options?: ErrorOptions,
   ) {
     const message = `OAuth2 error: ${errorCode}${errorDescription ? `: ${errorDescription}` : ''}.`;
-    super(message);
+    super(message, options);
   }
 }
 

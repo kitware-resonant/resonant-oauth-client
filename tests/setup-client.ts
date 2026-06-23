@@ -17,8 +17,8 @@ export const test = baseTest.extend('client', () => buildClient());
 
 test.afterEach(() => {
   // DOM must be manually reset between tests: https://github.com/vitest-dev/vitest/issues/682
-  window.localStorage.clear();
-  window.location.replace('http://www.example.com');
+  globalThis.localStorage.clear();
+  globalThis.location.replace('http://www.example.com');
 });
 
 // Allow usage outside of a true HTTPS environment

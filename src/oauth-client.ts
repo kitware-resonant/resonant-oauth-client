@@ -21,7 +21,7 @@ export default class OauthClient {
     protected readonly clientId: string,
     { scopes = [], redirectUrl = OauthClient.cleanedCurrentUrl() }: OauthClientOptions = {},
   ) {
-    if (!window.isSecureContext) {
+    if (!globalThis.isSecureContext) {
       throw new Error('OAuth Client cannot operate within insecure contexts.');
     }
 
@@ -62,7 +62,7 @@ export default class OauthClient {
     }
     // Regardless of the outcome, remove any Authorization parameters, since the flow is now
     // concluded.
-    window.history.replaceState(null, '', OauthClient.cleanedCurrentUrl().toString());
+    globalThis.history.replaceState(null, '', OauthClient.cleanedCurrentUrl().toString());
 
     if (!this.token) {
       // Try restoring from a locally saved token.
@@ -109,7 +109,7 @@ export default class OauthClient {
   }
 
   protected loadToken(): void {
-    const serializedToken = window.localStorage.getItem(this.tokenStorageKey);
+    const serializedToken = globalThis.localStorage.getItem(this.tokenStorageKey);
     this.token = serializedToken
       ? new TokenResponse(JSON.parse(serializedToken) as TokenResponseJson)
       : null;
@@ -118,9 +118,9 @@ export default class OauthClient {
   protected storeToken(): void {
     if (this.token) {
       const serializedToken = JSON.stringify(this.token.toJson());
-      window.localStorage.setItem(this.tokenStorageKey, serializedToken);
+      globalThis.localStorage.setItem(this.tokenStorageKey, serializedToken);
     } else {
-      window.localStorage.removeItem(this.tokenStorageKey);
+      globalThis.localStorage.removeItem(this.tokenStorageKey);
     }
   }
 
@@ -128,7 +128,7 @@ export default class OauthClient {
    * Remove Authorization Response parameters from the current URL query string.
    */
   protected static cleanedCurrentUrl(): URL {
-    const currentUrl = window.location.toString();
+    const currentUrl = globalThis.location.toString();
 
     const url = new URL(currentUrl);
     // Possible parameters in an Authorization Response

@@ -53,17 +53,17 @@ describe('not logged in', () => {
   test('full login flow', async () => {
     let client = buildClient();
     // Test outbound redirect to authorization
-    // const loaded = pEvent(window, 'load');
+    // const loaded = pEvent(globalThis, 'load');
     await client.redirectToLogin();
     // The redirect is executed at the end of an un-awaited promise chain in
     // "RedirectRequestHandler.performAuthorizationRequest".
-    // Unfortunately, the "window.happyDOM.waitUntilComplete()" API doesn't seem to always wait
+    // Unfortunately, the "globalThis.happyDOM.waitUntilComplete()" API doesn't seem to always wait
     // for the unsettled promise chain to complete.
-    await vi.waitUntil(() => new URL(window.location.href).hostname === 'api.example.com');
+    await vi.waitUntil(() => new URL(globalThis.location.href).hostname === 'api.example.com');
 
-    expect(window.localStorage.length).toEqual(3);
-    expect(window.localStorage.getItem('appauth_current_authorization_request')).not.toBeNull();
-    const redirectUrl = new URL(window.location.href);
+    expect(globalThis.localStorage.length).toEqual(3);
+    expect(globalThis.localStorage.getItem('appauth_current_authorization_request')).not.toBeNull();
+    const redirectUrl = new URL(globalThis.location.href);
     expect(redirectUrl.hostname).toEqual('api.example.com');
     expect(redirectUrl.pathname).toEqual('/authorize/');
     expect(redirectUrl.searchParams.has('client_id')).toEqual(true);
@@ -76,7 +76,7 @@ describe('not logged in', () => {
 
     expect(resp.status).toEqual(302);
     // biome-ignore lint/style/noNonNullAssertion: an error from assigning null is fine in a test
-    window.location.assign(resp.headers.get('Location')!);
+    globalThis.location.assign(resp.headers.get('Location')!);
     // Re-create the client, as this would happen after the redirect
     client = buildClient();
 
@@ -95,11 +95,11 @@ describe('failed login', () => {
     let client = buildClient(['invalid-scope']);
 
     await client.redirectToLogin();
-    await vi.waitUntil(() => new URL(window.location.href).hostname === 'api.example.com');
+    await vi.waitUntil(() => new URL(globalThis.location.href).hostname === 'api.example.com');
 
-    const resp = await fetch(window.location.href, { method: 'GET', redirect: 'manual' });
+    const resp = await fetch(globalThis.location.href, { method: 'GET', redirect: 'manual' });
     // biome-ignore lint/style/noNonNullAssertion: an error from assigning null is fine in a test
-    window.location.assign(resp.headers.get('Location')!);
+    globalThis.location.assign(resp.headers.get('Location')!);
     client = buildClient(['invalid-scope']);
 
     const maybeRestoreLoginRejection = expect(client.maybeRestoreLogin()).rejects;
@@ -108,16 +108,16 @@ describe('failed login', () => {
 
     expect(client.isLoggedIn).toEqual(false);
     expect(client.authHeaders).toEqual({});
-    expect(window.localStorage).toHaveLength(0);
+    expect(globalThis.localStorage).toHaveLength(0);
   });
 
   test('failed token exchange', async () => {
     let client = buildClient();
     await client.redirectToLogin();
-    await vi.waitUntil(() => new URL(window.location.href).hostname === 'api.example.com');
-    const resp = await fetch(window.location.href, { method: 'GET', redirect: 'manual' });
+    await vi.waitUntil(() => new URL(globalThis.location.href).hostname === 'api.example.com');
+    const resp = await fetch(globalThis.location.href, { method: 'GET', redirect: 'manual' });
     // biome-ignore lint/style/noNonNullAssertion: an error from assigning null is fine in a test
-    window.location.assign(resp.headers.get('Location')!);
+    globalThis.location.assign(resp.headers.get('Location')!);
     client = buildClient();
 
     // Simulate a race condition where the client is disabled before token exchange
@@ -132,10 +132,10 @@ describe('failed login', () => {
 describe('already logged in', () => {
   test.beforeEach(async ({ client }) => {
     await client.redirectToLogin();
-    await vi.waitUntil(() => new URL(window.location.href).hostname === 'api.example.com');
-    const resp = await fetch(window.location.href, { method: 'GET', redirect: 'manual' });
+    await vi.waitUntil(() => new URL(globalThis.location.href).hostname === 'api.example.com');
+    const resp = await fetch(globalThis.location.href, { method: 'GET', redirect: 'manual' });
     // biome-ignore lint/style/noNonNullAssertion: an error from assigning null is fine in a test
-    window.location.assign(resp.headers.get('Location')!);
+    globalThis.location.assign(resp.headers.get('Location')!);
     await client.maybeRestoreLogin();
   });
 
@@ -164,7 +164,7 @@ describe('already logged in', () => {
 
     expect(client.isLoggedIn).toEqual(false);
     expect(client.authHeaders).toEqual({});
-    expect(window.localStorage).toHaveLength(0);
+    expect(globalThis.localStorage).toHaveLength(0);
   });
 });
 

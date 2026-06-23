@@ -3,14 +3,11 @@
   "version": "0.0.0",
   "description": "A TypeScript library for performing OAuth2 login to a Resonant server.",
   "repository": "github:kitware-resonant/resonant-oauth-client",
-  "author": "Kitware, Inc. <kitware@kitware.com>",
   "license": "Apache-2.0",
+  "author": "Kitware, Inc. <kitware@kitware.com>",
   "type": "module",
-  "engines": {
-    "node": ">=16"
-  },
-  "module": "./dist/index.js",
   "exports": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "NOTICE",
@@ -18,16 +15,16 @@
     "/dist/"
   ],
   "scripts": {
+    "build": "npm-run-all build:clean build:compile",
+    "build:clean": "rimraf ./dist",
+    "build:compile": "tsc",
+    "format": "biome check --write --error-on-warnings",
+    "prepack": "npm-run-all build",
+    "test": "npm-run-all test:*",
     "test:lint": "biome ci --error-on-warnings",
     "test:type": "tsc --project ./tests",
     "test:unit": "vitest run",
-    "test": "npm-run-all test:*",
-    "format": "biome check --write --error-on-warnings",
-    "watch": "tsc --watch",
-    "build:clean": "rimraf ./dist",
-    "build:compile": "tsc",
-    "build": "npm-run-all build:clean build:compile",
-    "prepack": "npm-run-all build"
+    "watch": "tsc --watch"
   },
   "dependencies": {
     "@openid/appauth": "^1.3.2"
@@ -35,13 +32,16 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.1",
     "@node-oauth/oauth2-server": "^5.2.0",
-    "@resonant/biome-config": "^0.3.0",
-    "@vitest/coverage-v8": "4.1.8",
+    "@resonant/biome-config": "^0.4.0",
+    "@vitest/coverage-v8": "4.1.9",
     "happy-dom": "^20.8.7",
     "msw": "^2.8.0",
     "npm-run-all2": "^9.0.0",
     "rimraf": "^6.0.1",
     "typescript": "~6.0.0",
     "vitest": "^4.0.8"
+  },
+  "engines": {
+    "node": ">=16"
   }
 }

@@ -130,6 +130,7 @@ export default class OauthFacade {
       if (error instanceof AppAuthError) {
         if (error.extras instanceof TokenError) {
           // The server returned a well-formed OAuth2 error
+          // biome-ignore lint/style/useErrorCause: cause is passed via the 4th argument (ErrorOptions)
           throw new TokenFailureError(
             error.extras.error,
             error.extras.errorDescription,
@@ -142,7 +143,7 @@ export default class OauthFacade {
       }
       // This should never happen
       /* v8 ignore next 2 */
-      throw new Error('Internal error');
+      throw new Error('Internal error', { cause: error });
     }
   }
 
@@ -189,7 +190,7 @@ export default class OauthFacade {
       }
       // This should never happen
       /* v8 ignore next 2 */
-      throw new Error('Internal error');
+      throw new Error('Internal error', { cause: error });
     }
   }
 

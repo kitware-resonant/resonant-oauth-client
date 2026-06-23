@@ -8,8 +8,7 @@ export default class OauthFetchRequestor extends FetchRequestor {
   private static toHeaders(settings: JQuery.AjaxSettings) {
     const newHeaders = new Headers();
     for (const [key, value] of Object.entries(settings.headers ?? {})) {
-      // Using != also removes undefined
-      if (value != null) {
+      if (value !== null && value !== undefined) {
         newHeaders.append(key, value);
       }
     }

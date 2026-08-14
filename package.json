@@ -42,7 +42,7 @@
     "vitest": "^4.0.8"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=22"
   },
   "allowScripts": {
     "msw": false

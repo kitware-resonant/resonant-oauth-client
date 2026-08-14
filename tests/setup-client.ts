@@ -1,13 +1,6 @@
-import type { Window as HappyDomWindow } from 'happy-dom';
 import { test as baseTest, vi } from 'vitest';
 
 import OAuthClient from '../src/index.js';
-
-// HappyDOM has its own version of Window with a few extra properties,
-// so make them known to TypeScript
-declare global {
-  interface Window extends HappyDomWindow {}
-}
 
 export function buildClient(scopes: string[] = []): OAuthClient {
   return new OAuthClient(new URL('https://api.example.com'), 'resonant-client-id', { scopes });

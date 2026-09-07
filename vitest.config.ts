@@ -14,7 +14,7 @@ export default defineConfig({
     },
     coverage: {
       enabled: true,
-      include: ['src/**'],
+      include: ['src'],
       reporter: ['text-summary', 'html'],
     },
     setupFiles: ['./tests/setup.ts'],

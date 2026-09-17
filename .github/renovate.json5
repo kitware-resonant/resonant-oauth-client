@@ -3,4 +3,11 @@
   extends: [
     'github>kitware-resonant/.github:renovate-library-core.json5',
   ],
+  packageRules: [
+    {
+      // Broken until: https://github.com/openid/AppAuth-JS/issues/234#issuecomment-5707479164
+      matchPackageNames: ['@openid/appauth'],
+      allowedVersions: '<1.4.0',
+    },
+  ],
 }

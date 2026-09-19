@@ -16,7 +16,7 @@ indent_size = 2
 [*.ini]
 indent_size = 4
 
-[*.{js,ts}]
+[*.{js,ts,vue}]
 indent_size = 2
 max_line_length = 100
 
@@ -26,6 +26,9 @@ indent_size = 2
 [*.py]
 indent_size = 4
 max_line_length = 100
+
+[*.sh]
+indent_size = 2
 
 [*.toml]
 indent_size = 2

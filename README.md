@@ -68,12 +68,8 @@ To develop the library using the example app:
 ```bash
 # From the root of the repository
 npm install
-npm run watch
-```
-In another terminal:
-```bash
-# From the root of the repository
 cd example
 npm install
 npm run serve
 ```
+The example app serves the library directly from its TypeScript source, so no build step is needed.

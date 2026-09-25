@@ -3,20 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "license": "Apache-2.0",
+  "type": "module",
   "scripts": {
-    "serve": "parcel --watch-dir .. index.html"
+    "serve": "vite"
   },
-  "browserslist": [
-    "last 1 chrome version",
-    "last 1 firefox version"
-  ],
   "dependencies": {
     "@resonant/oauth-client": "file:.."
   },
   "devDependencies": {
-    "parcel": "^2.14.4"
-  },
-  "@parcel/resolver-default": {
-    "packageExports": true
+    "vite": "^8.3.1"
   }
 }

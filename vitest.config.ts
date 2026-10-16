@@ -10,6 +10,14 @@ export default defineConfig({
     environmentOptions: {
       happyDOM: {
         url: 'http://www.example.com',
+        settings: {
+          fetch: {
+            // happy-dom sends a CORS preflight for every cross-origin fetch, even "simple" requests
+            // which real browsers send without one. To avoid needing to mock support for OPTIONS
+            // (which isn't used in a production environment), disable CORS.
+            disableSameOriginPolicy: true,
+          },
+        },
       },
     },
     coverage: {

@@ -68,8 +68,6 @@ To develop the library using the example app:
 ```bash
 # From the root of the repository
 npm install
-cd example
-npm install
-npm run serve
+npm run example
 ```
 The example app serves the library directly from its TypeScript source, so no build step is needed.

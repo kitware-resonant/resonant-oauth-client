@@ -25,11 +25,6 @@ jobs:
       - name: Run tests
         run: |
           npm run test
-      - name: Install example dependencies
-        run: |
-          npm ci
-        working-directory: example
       - name: Ensure example build succeeds
         run: |
-          npm run build
-        working-directory: example
+          npm run example:build

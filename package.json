@@ -18,6 +18,8 @@
     "build": "npm-run-all build:clean build:compile",
     "build:clean": "rimraf ./dist",
     "build:compile": "tsc",
+    "example": "vite ./example",
+    "example:build": "vite build ./example",
     "format": "biome check --write --error-on-warnings",
     "prepack": "npm-run-all build",
     "test": "npm-run-all test:*",
@@ -39,6 +41,7 @@
     "npm-run-all2": "9.0.3",
     "rimraf": "6.1.3",
     "typescript": "7.0.2",
+    "vite": "8.3.1",
     "vitest": "5.0.3"
   },
   "engines": {

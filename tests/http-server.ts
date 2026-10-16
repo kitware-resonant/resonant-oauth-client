@@ -1,11 +1,6 @@
 import OAuth2Server from '@node-oauth/oauth2-server';
-import {
-  type DefaultBodyType,
-  HttpResponse,
-  http,
-  type JsonBodyType,
-  type StrictRequest,
-} from 'msw';
+import type { DefaultBodyType, JsonBodyType } from 'msw';
+import { HttpResponse, http, type StrictRequest } from 'msw/http';
 import { setupServer } from 'msw/node';
 
 import oauth from './oauth2.js';
@@ -15,9 +10,9 @@ async function mswRequestToOauth(
 ): Promise<OAuth2Server.Request> {
   const headers = {
     ...Object.fromEntries(request.headers),
-    // TODO: MSW is failing to add Content-Length headers, so the internals of
-    //  "@node-oauth/oauth2-server" are refusing to allow POST bodies;
-    //  See: https://github.com/mswjs/msw/issues/2674
+    // "@node-oauth/oauth2-server" refuses to parse a POST body unless a "Content-Length" (or
+    // "Transfer-Encoding") header is present. Due to a bug, this excluded from the server's
+    // version of the Request. See: https://github.com/mswjs/msw/issues/2815
     'Content-Length': (await request.clone().text()).length.toString(),
   };
 

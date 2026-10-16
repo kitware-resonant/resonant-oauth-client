@@ -55,8 +55,5 @@
       "name": "node",
       "version": ">=24.15"
     }
-  },
-  "allowScripts": {
-    "msw": false
   }
 }

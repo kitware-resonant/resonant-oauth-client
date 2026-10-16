@@ -7,7 +7,7 @@
   "author": "Kitware, Inc. <kitware@kitware.com>",
   "type": "module",
   "exports": "./dist/index.js",
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "NOTICE",
@@ -18,6 +18,8 @@
     "build": "npm-run-all build:clean build:compile",
     "build:clean": "rimraf ./dist",
     "build:compile": "tsc",
+    "example": "vite ./example",
+    "example:build": "vite build ./example",
     "format": "biome check --write --error-on-warnings",
     "prepack": "npm-run-all build",
     "test": "npm-run-all test:*",
@@ -30,19 +32,29 @@
     "@openid/appauth": ">=1.3.2 <1.4.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.1",
-    "@node-oauth/oauth2-server": "^5.2.0",
-    "@resonant/biome-config": "^0.4.0",
+    "@biomejs/biome": "2.5.15",
+    "@node-oauth/oauth2-server": "5.3.0",
+    "@resonant/biome-config": "0.4.0",
     "@vitest/coverage-v8": "5.0.3",
-    "happy-dom": "^20.8.7",
-    "msw": "^2.8.0",
-    "npm-run-all2": "^9.0.0",
-    "rimraf": "^6.0.1",
-    "typescript": "~7.0.0",
-    "vitest": "^5.0.0"
+    "happy-dom": "20.14.6",
+    "msw": "2.15.0",
+    "npm-run-all2": "9.0.3",
+    "rimraf": "6.1.3",
+    "typescript": "7.0.2",
+    "vite": "8.3.1",
+    "vitest": "5.0.3"
   },
   "engines": {
     "node": ">=22"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "npm"
+    },
+    "runtime": {
+      "name": "node",
+      "version": ">=24.15"
+    }
   },
   "allowScripts": {
     "msw": false

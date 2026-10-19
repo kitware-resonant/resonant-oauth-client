@@ -4,10 +4,15 @@
     'github>kitware-resonant/.github:renovate-library-core.json5',
   ],
   packageRules: [
+    // 1.4.0 is broken: https://github.com/openid/AppAuth-JS/issues/234#issuecomment-5707479164
+    // Skip exactly that release, but still propose anything newer in its own
+    // PR (kept out of the "all non-major dependencies" group and never
+    // automerged) so a fix is noticed and reviewed.
     {
-      // Broken until: https://github.com/openid/AppAuth-JS/issues/234#issuecomment-5707479164
       matchPackageNames: ['@openid/appauth'],
-      allowedVersions: '<1.4.0',
+      allowedVersions: '<1.4.0 || >1.4.0',
+      groupName: '@openid/appauth',
+      automerge: false,
     },
   ],
 }

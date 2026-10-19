@@ -47,25 +47,29 @@ export const model: OAuth2Server.AuthorizationCodeModel | OAuth2Server.RefreshTo
     return authCodeDb.delete(code.authorizationCode);
   },
   async saveToken(token, client, user) {
-    // Structurally, "token" should already contain "client" and "user", but due to a likely bug,
-    // it doesn't
-    token.client = client;
-    token.user = user;
+    const savedToken: Token = {
+      accessToken: token.accessToken,
+      accessTokenExpiresAt: token.accessTokenExpiresAt,
+      refreshToken: token.refreshToken,
+      refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+      scope: token.scope,
+      client,
+      user,
+    };
+    accessTokenDb.set(savedToken.accessToken, savedToken);
 
-    accessTokenDb.set(token.accessToken, token);
-
-    if (token.refreshToken) {
-      // Clone "token" to "refreshToken", but omit some properties
+    if (savedToken.refreshToken) {
+      // Clone "savedToken" to "refreshToken", but omit some properties
       const refreshToken: RefreshToken = {
-        refreshToken: token.refreshToken,
-        refreshTokenExpiresAt: token.refreshTokenExpiresAt,
-        scopes: token.scope,
-        client: token.client,
-        user: token.user,
+        refreshToken: savedToken.refreshToken,
+        refreshTokenExpiresAt: savedToken.refreshTokenExpiresAt,
+        scope: savedToken.scope,
+        client,
+        user,
       };
       refreshTokenDb.set(refreshToken.refreshToken, refreshToken);
     }
-    return token;
+    return savedToken;
   },
   async getAccessToken(accessToken) {
     return accessTokenDb.get(accessToken);
@@ -78,4 +82,4 @@ export const model: OAuth2Server.AuthorizationCodeModel | OAuth2Server.RefreshTo
   },
 };
 
-export default new OAuth2Server({ model });
+export default new OAuth2Server({ model, requirePKCE: true });

@@ -35,16 +35,16 @@
     "@openid/appauth": ">=1.3.2 <1.4.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.15",
+    "@biomejs/biome": "2.6.3",
     "@node-oauth/oauth2-server": "5.3.1",
     "@resonant/biome-config": "0.4.2",
     "@vitest/coverage-v8": "5.0.5",
-    "happy-dom": "21.0.3",
+    "happy-dom": "21.0.4",
     "msw": "3.0.3",
-    "npm-run-all2": "9.0.3",
+    "npm-run-all2": "9.0.4",
     "rimraf": "6.1.3",
     "typescript": "7.0.2",
-    "vite": "8.3.4",
+    "vite": "8.3.5",
     "vitest": "5.0.5"
   },
   "engines": {

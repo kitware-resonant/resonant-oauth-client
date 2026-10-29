@@ -1,26 +1,31 @@
 # resonant-oauth-client
+
 [![npm (scoped)](https://img.shields.io/npm/v/@resonant/oauth-client)](https://www.npmjs.com/package/@resonant/oauth-client)
 
 A TypeScript library for performing OAuth login to a Resonant server.
 
 ## Description
+
 This provides support for authenticating with Resonant servers,
 using the OAuth2.0 Authorization Code Grant with PKCE flow.
 
 ## Supported environments
+
 This library is published as untranspiled ES2024 JavaScript, so it requires either:
-* a browser with full
+- a browser with full
   [ES2024 support](https://compat-table.github.io/compat-table/es2016plus/)
-* or Node 22+, for non-browser environments (such as server-side rendering)
+- or Node 22+, for non-browser environments (such as server-side rendering)
 
 ## Usage
-* Install the library:
+
+- Install the library:
 
   ```bash
   npm install @resonant/oauth-client
   ```
 
-* Instantiate an `OauthClient` with your application-specific configuration:
+- Instantiate an `OauthClient` with your application-specific configuration:
+
   ```typescript
   import OauthClient from '@resonant/oauth-client';
 
@@ -30,7 +35,8 @@ This library is published as untranspiled ES2024 JavaScript, so it requires eith
   );
   ```
 
-* Call `redirectToLogin` when it's time to start a login flow:
+- Call `redirectToLogin` when it's time to start a login flow:
+
   ```typescript
   document.querySelector('#sign-in-link').addEventListener('click', async (event) => {
     event.preventDefault();
@@ -39,22 +45,25 @@ This library is published as untranspiled ES2024 JavaScript, so it requires eith
   });
   ```
 
-* At the start of *every* page load, unconditionally call `maybeRestoreLogin`, to attempt to
+- At the start of _every_ page load, unconditionally call `maybeRestoreLogin`, to attempt to
   restore a login state; this will no-op if no login is present. Afterwards, get and store HTTP
   headers for authentication from `authHeaders`.
+
   ```typescript
   await oauthClient.maybeRestoreLogin();
   const { authHeaders } = oauthClient;
   ```
 
-* Include these headers with every Ajax API request:
+- Include these headers with every Ajax API request:
+
   ```typescript
   fetch('http://localhost:8000/api/files', {
     headers: authHeaders,
   });
   ```
 
-* The login state will persist across page refreshes. Call `logout` to clear any active login:
+- The login state will persist across page refreshes. Call `logout` to clear any active login:
+
   ```typescript
   document.querySelector('#sign-out-link').addEventListener('click', async (event) => {
     event.preventDefault();
@@ -64,6 +73,7 @@ This library is published as untranspiled ES2024 JavaScript, so it requires eith
   ```
 
 ## Development
+
 To develop the library using the example app:
 ```bash
 # From the root of the repository

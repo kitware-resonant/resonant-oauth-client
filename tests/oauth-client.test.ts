@@ -26,7 +26,7 @@ describe('API structure', () => {
     });
     vi.stubGlobal('isSecureContext', false);
 
-    expect(() => buildClient()).toThrowError(/cannot operate within insecure contexts/);
+    expect(() => buildClient()).toThrowError(/cannot operate within insecure contexts/u);
   });
 });
 
@@ -104,7 +104,7 @@ describe('failed login', () => {
 
     const maybeRestoreLoginRejection = expect(client.maybeRestoreLogin()).rejects;
     await maybeRestoreLoginRejection.toBeInstanceOf(AuthorizationFailureError);
-    await maybeRestoreLoginRejection.toThrowError(/^OAuth2 error: invalid_scope/);
+    await maybeRestoreLoginRejection.toThrowError(/^OAuth2 error: invalid_scope/u);
 
     expect(client.isLoggedIn).toEqual(false);
     expect(client.authHeaders).toEqual({});
@@ -125,7 +125,7 @@ describe('failed login', () => {
 
     const maybeRestoreLoginRejection = expect(client.maybeRestoreLogin()).rejects;
     await maybeRestoreLoginRejection.toBeInstanceOf(TokenFailureError);
-    await maybeRestoreLoginRejection.toThrowError(/^OAuth2 error: invalid_client/);
+    await maybeRestoreLoginRejection.toThrowError(/^OAuth2 error: invalid_client/u);
   });
 });
 

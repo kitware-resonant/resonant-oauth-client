@@ -12,6 +12,7 @@ using the OAuth2.0 Authorization Code Grant with PKCE flow.
 ## Supported environments
 
 This library is published as untranspiled ES2024 JavaScript, so it requires either:
+
 - a browser with full
   [ES2024 support](https://compat-table.github.io/compat-table/es2016plus/)
 - or Node 22+, for non-browser environments (such as server-side rendering)
@@ -75,6 +76,7 @@ This library is published as untranspiled ES2024 JavaScript, so it requires eith
 ## Development
 
 To develop the library using the example app:
+
 ```bash
 # From the root of the repository
 npm install
